@@ -19,7 +19,7 @@ Build ReserveFlow as project 5 in the KV Web Starter portfolio series. This repo
 - [x] `01-foundation` - ReserveFlow naming, docs, baseline checks.
 - [x] `02-booking-data-model` - Prisma models, seed, typed helpers.
 - [x] `03-public-booking-flow` - landing, services, booking request, confirmation page.
-- [ ] `04-dashboard-bookings` - dashboard overview, booking list, detail, status actions.
+- [x] `04-dashboard-bookings` - dashboard overview, booking list, detail, status actions.
 - [ ] `05-design-polish` - distinct visual identity, responsive polish, case study.
 - [ ] `06-deploy` - deployment, smoke checks, Symphonee notes, dev-profile update.
 
@@ -42,9 +42,9 @@ Build ReserveFlow as project 5 in the KV Web Starter portfolio series. This repo
 - [x] Public booking request form.
 - [x] Booking statuses: REQUESTED, CONFIRMED, COMPLETED, CANCELLED.
 - [x] Confirmation/status page for a booking.
-- [ ] Dashboard stats for total, requested, confirmed, completed, cancelled, upcoming.
-- [ ] Booking list and detail screens.
-- [ ] Status update actions.
+- [x] Dashboard stats for total, requested, confirmed, completed, cancelled, upcoming.
+- [x] Booking list and detail screens.
+- [x] Status update actions.
 - [ ] Confirmation email helper.
 - [x] Demo seed data.
 - [ ] Case study page.
@@ -66,3 +66,4 @@ ReserveFlow should feel light, precise, and operational. The visual language sho
 - Completed ReserveFlow identity pass, removed inherited test database helper, and validated lint/typecheck/tests.
 - Completed `02-booking-data-model`: specialized Prisma booking schema, added service categories, staff profiles, availability relations, public booking tokens, customer notes, and richer demo seed data.
 - Completed `03-public-booking-flow`: service catalog now reads booking services, booking requests redirect to a public confirmation token page, and the public flow validates with lint/typecheck/tests.
+- Completed `04-dashboard-bookings`: dashboard stats read Prisma booking counts, booking list opens real records, detail page shows customer/service/staff data, and status actions update Prisma.
