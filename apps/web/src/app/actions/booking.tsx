@@ -257,6 +257,27 @@ export async function deleteAvailabilityException(formData: FormData) {
   revalidatePath("/dashboard/availability");
 }
 
+export async function updateBookingStatus(formData: FormData) {
+  await requireDashboardAccess();
+
+  const bookingId = String(formData.get("bookingId") ?? "");
+  const status = String(formData.get("status") ?? "") as BookingStatus;
+  const allowedStatuses = Object.values(BookingStatus);
+
+  if (!bookingId || !allowedStatuses.includes(status)) {
+    return;
+  }
+
+  await prisma.booking.update({
+    where: { id: bookingId },
+    data: { status },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/bookings");
+  revalidatePath(`/dashboard/bookings/${bookingId}`);
+}
+
 export async function createBookingRequest(formData: FormData) {
   const bookingRequest = parseBookingRequestFormData(formData);
 
