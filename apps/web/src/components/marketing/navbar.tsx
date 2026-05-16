@@ -11,9 +11,10 @@ const navItems = [
 
 export function Navbar() {
   return (
-    <header className="border-b bg-background">
+    <header className="border-b bg-card/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <Link href="/" className="text-base font-semibold">
+        <Link href="/" className="flex items-center gap-2 text-base font-semibold">
+          <span className="size-3 rounded-full bg-[var(--accent)]" />
           ReserveFlow
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
@@ -24,7 +25,7 @@ export function Navbar() {
           ))}
         </nav>
         <Button asChild size="sm">
-          <Link href="/login">Dashboard</Link>
+          <Link href="/booking">Book</Link>
         </Button>
       </div>
     </header>

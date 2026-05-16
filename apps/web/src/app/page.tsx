@@ -28,7 +28,7 @@ export default function Home() {
       <main>
         <section className="mx-auto grid w-full max-w-6xl gap-12 px-6 py-16 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div className="max-w-3xl">
-            <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-primary">
               Project 5 - KV Web Starter portfolio
             </p>
             <h1 className="text-4xl font-semibold tracking-normal text-balance sm:text-6xl">
@@ -51,9 +51,9 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="border bg-card p-6 shadow-sm">
+          <div className="rounded-lg border bg-card p-6 shadow-sm">
             <div className="mb-6 flex items-center gap-3 border-b pb-5">
-              <div className="flex size-12 items-center justify-center border bg-background">
+              <div className="flex size-12 items-center justify-center rounded-lg border bg-[var(--accent-soft)]">
                 <CalendarCheck className="size-6" />
               </div>
               <div>
@@ -64,7 +64,7 @@ export default function Home() {
             <div className="grid gap-4">
               {highlights.map((item) => (
                 <div key={item.name} className="flex gap-4 border-b pb-4 last:border-b-0 last:pb-0">
-                  <div className="flex size-10 shrink-0 items-center justify-center border bg-background">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border bg-secondary">
                     <item.icon className="size-5" />
                   </div>
                   <div>
@@ -76,6 +76,15 @@ export default function Home() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+        <section className="border-y bg-card">
+          <div className="mx-auto grid max-w-6xl gap-3 px-6 py-6 text-sm text-muted-foreground sm:grid-cols-4">
+            {["09:00 Intake", "10:30 Review", "13:00 Planning", "15:30 Confirmed"].map((slot) => (
+              <div key={slot} className="rounded-lg border bg-background px-4 py-3">
+                {slot}
+              </div>
+            ))}
           </div>
         </section>
       </main>
