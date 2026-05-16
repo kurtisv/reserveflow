@@ -2,10 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { nanoid } from "nanoid";
 
 import { BookingConfirmationEmail } from "@/emails/booking-confirmation";
 import { BookingStatus } from "@/generated/prisma";
-import { nanoid } from "nanoid";
 import { requireDashboardAccess } from "@/lib/dashboard-auth";
 import { sendTransactionalEmail } from "@/lib/email/resend";
 import { prisma } from "@/lib/db";
@@ -312,6 +312,7 @@ export async function createBookingRequest(formData: FormData) {
       booking: {
         customerEmail: booking.customerEmail,
         customerName: booking.customerName,
+        publicToken: booking.publicToken,
         startAt: booking.startAt,
         serviceName: service.name,
       },
@@ -335,5 +336,5 @@ export async function createBookingRequest(formData: FormData) {
   });
 
   revalidatePath("/dashboard/bookings");
-  redirect("/booking?success=1");
+  redirect(`/booking/${result.booking.publicToken}`);
 }
