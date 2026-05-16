@@ -3,7 +3,7 @@ import { Navbar } from "@/components/marketing/navbar";
 
 export function MarketingPageShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen text-foreground">
       <Navbar />
       {children}
       <Footer />

@@ -139,7 +139,7 @@ export default async function BookingPage({
       <main>
         <section className="mx-auto grid w-full max-w-6xl gap-10 px-6 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
-            <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-primary">
               Booking MVP
             </p>
             <h1 className="text-4xl font-semibold tracking-normal text-balance sm:text-5xl">
@@ -224,7 +224,7 @@ export default async function BookingPage({
                     <p className="mt-2 text-sm leading-6 text-muted-foreground">
                       {service.description}
                     </p>
-                    <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="mt-3 flex items-center gap-2 text-sm text-primary">
                       <Clock3 className="size-4" />
                       {service.durationMin} minutes
                     </div>
@@ -248,7 +248,7 @@ export default async function BookingPage({
                       {slots.map((slot, index) => (
                         <label
                           key={slot.startTime}
-                          className="flex h-10 cursor-pointer items-center justify-center gap-2 border bg-secondary px-3 text-sm font-medium text-secondary-foreground has-[:checked]:border-primary has-[:checked]:bg-primary has-[:checked]:text-primary-foreground"
+                            className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border bg-secondary px-3 text-sm font-medium text-secondary-foreground has-[:checked]:border-primary has-[:checked]:bg-primary has-[:checked]:text-primary-foreground"
                         >
                           <input
                             className="sr-only"

@@ -15,7 +15,7 @@ export default function CaseStudyPage() {
     <MarketingPageShell>
       <main className="mx-auto grid w-full max-w-5xl gap-10 px-6 py-16 sm:py-24">
         <div className="max-w-3xl">
-          <p className="text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
+          <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
             Case study
           </p>
           <h1 className="mt-4 text-4xl font-semibold tracking-normal text-balance sm:text-5xl">
@@ -29,7 +29,7 @@ export default function CaseStudyPage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           {points.map((point) => (
-            <div key={point} className="border bg-card p-5 text-sm leading-6 text-muted-foreground">
+            <div key={point} className="rounded-lg border bg-card p-5 text-sm leading-6 text-muted-foreground">
               {point}
             </div>
           ))}

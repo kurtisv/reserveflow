@@ -60,7 +60,7 @@ export default async function ServicesPage() {
     <MarketingPageShell>
       <main className="mx-auto w-full max-w-6xl px-6 py-16 sm:py-24">
         <div className="max-w-3xl">
-          <p className="text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
+          <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
             Services
           </p>
           <h1 className="mt-4 text-4xl font-semibold tracking-normal text-balance sm:text-5xl">
@@ -76,7 +76,7 @@ export default async function ServicesPage() {
           {services.map((service) => (
             <Card key={service.id} className="flex h-full flex-col">
               <CardHeader>
-                <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                <p className="text-xs font-medium uppercase tracking-[0.16em] text-primary">
                   {service.category}
                 </p>
                 <CardTitle>{service.name}</CardTitle>
