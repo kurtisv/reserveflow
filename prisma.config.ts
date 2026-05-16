@@ -7,6 +7,6 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env.DATABASE_URL ?? "postgresql://postgres:postgres@localhost:5432/kv_web_starter",
+    url: process.env.DATABASE_URL ?? "postgresql://postgres:postgres@localhost:5432/reserveflow",
   },
 });

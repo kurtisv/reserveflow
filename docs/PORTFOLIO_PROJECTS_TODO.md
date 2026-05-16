@@ -1,84 +1,66 @@
-# Portfolio Projects TODO
+# ReserveFlow Project TODO
 
 ## Global objective
 
-Build a collection of small full-stack portfolio applications using kv-web-starter to demonstrate what can be built with the boilerplate. Each project targets a different use case and stands on its own as a recruiter-ready demo.
+Build ReserveFlow as project 5 in the KV Web Starter portfolio series. This repo should show a distinct booking-system use case with a clean public booking flow, a practical operations dashboard, and a calm design language that differs from the first four portfolio projects.
 
-## Project backlog
+## Project identity
 
-- [x] SupportDesk Lite — current project
-- [ ] QuotePilot
-- [ ] API Meter
-- [ ] StockRoom
-- [ ] HireTrack
-- [ ] ClientPortal
-- [ ] EventPass
-- [ ] StatusBoard
+- Name: ReserveFlow
+- Project number: 5
+- Category: booking and appointment operations
+- Source boilerplate: `kv-web-starter`
+- GitHub repo: `https://github.com/kurtisv/reserveflow`
+- Recruiter-facing: yes
 
----
+## Branch workflow
 
-## Current project: SupportDesk Lite
+- [x] `main` - clean boilerplate copy committed and pushed.
+- [x] `01-foundation` - ReserveFlow naming, docs, baseline checks.
+- [ ] `02-booking-data-model` - Prisma models, seed, typed helpers.
+- [ ] `03-public-booking-flow` - landing, services, booking request, confirmation page.
+- [ ] `04-dashboard-bookings` - dashboard overview, booking list, detail, status actions.
+- [ ] `05-design-polish` - distinct visual identity, responsive polish, case study.
+- [ ] `06-deploy` - deployment, smoke checks, Symphonee notes, dev-profile update.
 
-**CV summary:** Mini customer support portal built with Next.js, TypeScript, Prisma, Auth.js and Resend. Handles ticket creation, status/priority management, internal comments, and email notifications.
+## Foundation
 
-### Planning
-- [x] Analyze existing repo structure
-- [x] Identify current routes
-- [x] Identify reusable UI components
-- [x] Identify Prisma/Auth structure
-- [x] Define ticket data model
-- [x] Create this TODO file
+- [x] Copy `kv-web-starter` into `C:\code\reserveflow`.
+- [x] Register `reserveflow` in Symphonee.
+- [x] Create public GitHub repo.
+- [x] Push clean starter baseline.
+- [x] Rename metadata and navigation from generic starter to ReserveFlow.
+- [x] Replace inherited SupportDesk TODO with ReserveFlow project plan.
+- [x] Run lint.
+- [x] Run typecheck.
+- [x] Run tests.
 
-### Database
-- [x] Add Ticket model
-- [x] Add TicketComment model
-- [x] Add enums: TicketStatus, TicketPriority, TicketCategory
-- [ ] Create migration (requires DB — run: pnpm db:migrate)
-- [x] Add seed / demo tickets (4 tickets + 1 comment in prisma/seed.ts)
+## MVP feature checklist
 
-### Public pages
-- [x] Build landing page (replace /)
-- [x] Build /support form page
-- [x] Build /case-study page
+- [ ] Service catalog with duration, price, category, and description.
+- [ ] Staff/resource profiles with availability.
+- [ ] Public booking request form.
+- [ ] Booking statuses: REQUESTED, CONFIRMED, COMPLETED, CANCELLED.
+- [ ] Confirmation/status page for a booking.
+- [ ] Dashboard stats for total, requested, confirmed, completed, cancelled, upcoming.
+- [ ] Booking list and detail screens.
+- [ ] Status update actions.
+- [ ] Confirmation email helper.
+- [ ] Demo seed data.
+- [ ] Case study page.
 
-### Navigation
-- [x] Adapt Navbar (Home / Support / Case Study / Login)
-- [x] Adapt dashboard sidebar (Overview / Tickets / Settings)
-- [x] Rename app title to SupportDesk Lite
+## Design direction
 
-### Dashboard
-- [x] Replace dashboard overview with ticket stats cards
-- [x] Build /dashboard/tickets list page
-- [x] Build /dashboard/tickets/[id] detail page
-- [x] Add status update action
-- [x] Add priority update action
-- [x] Add comment action
-
-### Server actions
-- [x] createTicket
-- [x] updateTicketStatus
-- [x] updateTicketPriority
-- [x] addTicketComment
-
-### Email
-- [x] Add TicketCreatedEmail template (emails/ticket-created.tsx)
-- [x] Add TicketStatusUpdatedEmail template (emails/ticket-status-updated.tsx)
-- [x] Resend fallback handled by existing sendTransactionalEmail (returns {skipped:true} if no key)
-
-### Quality
-- [x] pnpm lint — clean
-- [x] pnpm typecheck — clean
-- [ ] pnpm test (if available)
-- [x] DB migration — ran via Supabase Management API (HTTPS, no port 5432 needed)
-- [x] Demo seed — 4 tickets + 1 comment inserted via SQL API
-- [x] pnpm dev — server up on localhost:3001, all pages 200
-
----
+ReserveFlow should feel light, precise, and operational. The visual language should use calendar/time-slot cues, a soft blue-teal base, a warm accent for active booking moments, and more whitespace than the dashboard-heavy projects.
 
 ## Progress log
 
-### 2026-05-15
-- Completed: full boilerplate audit, Prisma models + enums, Prisma client regen, server actions, email templates, all pages (landing/support/case-study/dashboard/tickets/ticket-detail), navbar + sidebar, seed (4 demo tickets), Supabase project created (kv-supportdesk, ca-central-1), schema migrated via Management API, seed inserted via SQL API, pnpm dev running on localhost:3001, all pages 200. Lint clean, typecheck clean.
-- Remaining: browser walkthrough (login + dashboard test with demo credentials)
-- Blockers: none
-- Next step: open http://localhost:3001, login with admin@example.com / password123, verify dashboard + tickets
+### 2026-05-16
+
+- Created `projet5-reserveflow` Symphonee note.
+- Copied the boilerplate into `C:\code\reserveflow`.
+- Registered the repo in Symphonee and set it as active.
+- Created public GitHub repo `kurtisv/reserveflow`.
+- Pushed the clean starter baseline to `main`.
+- Started `01-foundation`.
+- Completed ReserveFlow identity pass, removed inherited test database helper, and validated lint/typecheck/tests.
