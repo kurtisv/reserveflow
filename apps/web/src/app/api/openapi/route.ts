@@ -4,7 +4,7 @@ export function GET() {
   return NextResponse.json({
     openapi: "3.1.0",
     info: {
-      title: "KV Web Starter API",
+      title: "ReserveFlow API",
       version: "0.1.0",
       description: "Starter API surface for paid API products.",
     },

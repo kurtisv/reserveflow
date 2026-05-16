@@ -4,10 +4,8 @@ import { Button } from "@/components/ui/button";
 
 const navItems = [
   { href: "/services", label: "Services" },
-  { href: "/pricing", label: "Pricing" },
   { href: "/booking", label: "Booking" },
-  { href: "/developers", label: "API" },
-  { href: "/docs", label: "Docs" },
+  { href: "/case-study", label: "Case study" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -16,7 +14,7 @@ export function Navbar() {
     <header className="border-b bg-background">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link href="/" className="text-base font-semibold">
-          KV Web Starter
+          ReserveFlow
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
           {navItems.map((item) => (

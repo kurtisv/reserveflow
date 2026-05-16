@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KV Web Starter",
-  description: "Premium modular boilerplate for marketing, booking, and SaaS/API projects.",
+  title: "ReserveFlow",
+  description: "Service booking and availability system built from the KV Web Starter boilerplate.",
 };
 
 export default function RootLayout({

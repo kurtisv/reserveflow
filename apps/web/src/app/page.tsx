@@ -1,77 +1,84 @@
 import Link from "next/link";
-import { ArrowRight, CalendarDays, KeyRound, ShieldCheck } from "lucide-react";
+import { ArrowRight, CalendarCheck, Clock3, Sparkles, UsersRound } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { MarketingPageShell } from "@/components/marketing/page-shell";
+import { Button } from "@/components/ui/button";
 
-const modules = [
+const highlights = [
   {
-    name: "Sites vitrines",
-    description: "Pages marketing, SEO, blog Sanity, formulaires et sections reutilisables.",
-    icon: ShieldCheck,
+    name: "Service catalog",
+    description: "Package durations, pricing, categories, and booking rules in one place.",
+    icon: Sparkles,
   },
   {
-    name: "Rendez-vous",
-    description: "Services, staff, disponibilites, exceptions, paiements et rappels.",
-    icon: CalendarDays,
+    name: "Availability",
+    description: "Staff and resource schedules are modeled for practical appointment flow.",
+    icon: Clock3,
   },
   {
-    name: "API payante",
-    description: "Cles API hashees, plans Stripe, limites, usage tracking et docs OpenAPI.",
-    icon: KeyRound,
+    name: "Operations",
+    description: "A dashboard keeps requested, confirmed, and completed bookings visible.",
+    icon: UsersRound,
   },
 ];
 
 export default function Home() {
   return (
     <MarketingPageShell>
-    <main>
-      <section className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 py-16 sm:py-24">
-        <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+      <main>
+        <section className="mx-auto grid w-full max-w-6xl gap-12 px-6 py-16 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div className="max-w-3xl">
             <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
-              KV Web Starter
+              Project 5 - KV Web Starter portfolio
             </p>
             <h1 className="text-4xl font-semibold tracking-normal text-balance sm:text-6xl">
-              Une base premium pour vendre des sites, du booking et des API.
+              Booking software for service teams that need a calmer calendar.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-              Next.js App Router, TypeScript strict, Prisma, Auth.js, Stripe,
-              Resend, Sanity-ready et une architecture modulaire pour livrer
-              vite sans repartir de zero.
+              ReserveFlow shows how the shared boilerplate becomes a focused appointment
+              product with public booking, availability rules, dashboard operations, and
+              email-ready confirmations.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild>
-                <Link href="/dashboard">
-                  Ouvrir le dashboard <ArrowRight className="size-4" />
+                <Link href="/booking">
+                  Request a booking <ArrowRight className="size-4" />
                 </Link>
               </Button>
               <Button asChild variant="secondary">
-                <Link href="/api/health">Verifier API</Link>
+                <Link href="/case-study">View case study</Link>
               </Button>
             </div>
           </div>
 
           <div className="border bg-card p-6 shadow-sm">
+            <div className="mb-6 flex items-center gap-3 border-b pb-5">
+              <div className="flex size-12 items-center justify-center border bg-background">
+                <CalendarCheck className="size-6" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Today</p>
+                <p className="text-xl font-semibold">12 booking requests</p>
+              </div>
+            </div>
             <div className="grid gap-4">
-              {modules.map((module) => (
-                <div key={module.name} className="flex gap-4 border-b pb-4 last:border-b-0 last:pb-0">
+              {highlights.map((item) => (
+                <div key={item.name} className="flex gap-4 border-b pb-4 last:border-b-0 last:pb-0">
                   <div className="flex size-10 shrink-0 items-center justify-center border bg-background">
-                    <module.icon className="size-5" />
+                    <item.icon className="size-5" />
                   </div>
                   <div>
-                    <h2 className="font-medium">{module.name}</h2>
+                    <h2 className="font-medium">{item.name}</h2>
                     <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                      {module.description}
+                      {item.description}
                     </p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
     </MarketingPageShell>
   );
 }

@@ -1,19 +1,19 @@
 const en = {
   app: {
-    name: "KV Web Starter",
-    tagline: "Premium modular boilerplate for marketing, booking, and SaaS/API projects.",
+    name: "ReserveFlow",
+    tagline: "Service booking, availability, and operations in one focused product.",
   },
   nav: {
     services: "Services",
     pricing: "Pricing",
     booking: "Booking",
-    api: "API",
+    api: "Case study",
     docs: "Docs",
     contact: "Contact",
     dashboard: "Dashboard",
   },
   booking: {
-    title: "Clear booking for services, staff, and availability.",
+    title: "Calm booking for services, staff, and availability.",
     updateAvailability: "Update availability",
     requestBooking: "Request booking",
   },
