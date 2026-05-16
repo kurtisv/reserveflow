@@ -20,7 +20,8 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@prisma/client": "^7.8.0"
+    "@prisma/client": "^7.8.0",
+    "next": "16.2.6"
   },
   "devDependencies": {
     "prettier": "^3.6.2",

@@ -21,7 +21,7 @@ Build ReserveFlow as project 5 in the KV Web Starter portfolio series. This repo
 - [x] `03-public-booking-flow` - landing, services, booking request, confirmation page.
 - [x] `04-dashboard-bookings` - dashboard overview, booking list, detail, status actions.
 - [x] `05-design-polish` - distinct visual identity, responsive polish, case study.
-- [ ] `06-deploy` - deployment, smoke checks, Symphonee notes, dev-profile update.
+- [x] `06-deploy` - deployment, smoke checks, Symphonee notes, dev-profile update.
 
 ## Foundation
 
@@ -68,3 +68,5 @@ ReserveFlow should feel light, precise, and operational. The visual language sho
 - Completed `03-public-booking-flow`: service catalog now reads booking services, booking requests redirect to a public confirmation token page, and the public flow validates with lint/typecheck/tests.
 - Completed `04-dashboard-bookings`: dashboard stats read Prisma booking counts, booking list opens real records, detail page shows customer/service/staff data, and status actions update Prisma.
 - Completed `05-design-polish`: added ReserveFlow light teal/sky/amber theme, rounded product surfaces, brighter marketing shell, and validated lint/typecheck/tests/build.
+- Started `06-deploy`: first Vercel deploy linked the project but needed explicit monorepo output configuration.
+- Completed `06-deploy`: added Vercel monorepo config, deployed production to `https://reserveflow-psi.vercel.app`, and smoke checked `/`, `/services`, `/booking`, `/case-study`, and `/api/health`.
