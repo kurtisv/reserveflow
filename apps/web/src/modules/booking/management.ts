@@ -3,6 +3,7 @@ import { z } from "zod";
 export const serviceFormSchema = z.object({
   name: z.string().trim().min(2, "Service name is required"),
   slug: z.string().trim().optional(),
+  category: z.string().trim().optional(),
   description: z.string().trim().optional(),
   durationMin: z.coerce.number().int().min(5).max(480),
   priceCents: z.coerce.number().int().min(0).optional(),
@@ -11,6 +12,8 @@ export const serviceFormSchema = z.object({
 export const staffFormSchema = z.object({
   name: z.string().trim().min(2, "Staff name is required"),
   email: z.string().trim().email().optional().or(z.literal("")),
+  roleTitle: z.string().trim().optional(),
+  bio: z.string().trim().optional(),
 });
 
 export const availabilityRuleFormSchema = z.object({
@@ -46,6 +49,7 @@ export function parseServiceFormData(formData: FormData) {
   const parsed = serviceFormSchema.parse({
     name: formData.get("name"),
     slug: formData.get("slug") || undefined,
+    category: formData.get("category") || undefined,
     description: formData.get("description") || undefined,
     durationMin: formData.get("durationMin"),
     priceCents: formData.get("priceCents") || undefined,
@@ -54,6 +58,7 @@ export function parseServiceFormData(formData: FormData) {
   return {
     ...parsed,
     slug: parsed.slug || slugifyServiceName(parsed.name),
+    category: parsed.category || "General",
   };
 }
 
@@ -61,11 +66,15 @@ export function parseStaffFormData(formData: FormData) {
   const parsed = staffFormSchema.parse({
     name: formData.get("name"),
     email: formData.get("email") || undefined,
+    roleTitle: formData.get("roleTitle") || undefined,
+    bio: formData.get("bio") || undefined,
   });
 
   return {
     ...parsed,
     email: parsed.email || undefined,
+    roleTitle: parsed.roleTitle || undefined,
+    bio: parsed.bio || undefined,
   };
 }
 

@@ -22,6 +22,7 @@ describe("booking management forms", () => {
     expect(parseServiceFormData(formData)).toMatchObject({
       name: "Strategy Session",
       slug: "strategy-session",
+      category: "General",
       durationMin: 45,
       priceCents: 12500,
     });
@@ -35,6 +36,8 @@ describe("booking management forms", () => {
     expect(parseStaffFormData(formData)).toEqual({
       name: "Jane Operator",
       email: undefined,
+      roleTitle: undefined,
+      bio: undefined,
     });
   });
 

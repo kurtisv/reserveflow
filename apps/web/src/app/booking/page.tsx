@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
 import { generateBookingSlots } from "@/modules/booking";
 
@@ -16,6 +17,7 @@ const demoServices = [
     durationMin: 30,
     priceCents: null,
     description: "Qualifier le besoin, le budget et la prochaine etape.",
+    category: "Consulting",
   },
   {
     id: "implementation-sprint",
@@ -23,6 +25,7 @@ const demoServices = [
     durationMin: 60,
     priceCents: 25000,
     description: "Planifier une livraison courte avec livrables et criteres de test.",
+    category: "Planning",
   },
 ];
 
@@ -215,6 +218,9 @@ export default async function BookingPage({
                       <h2 className="font-medium">{service.name}</h2>
                       <span className="text-sm font-medium">{formatPrice(service.priceCents)}</span>
                     </div>
+                    <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                      {service.category}
+                    </p>
                     <p className="mt-2 text-sm leading-6 text-muted-foreground">
                       {service.description}
                     </p>
@@ -278,6 +284,10 @@ export default async function BookingPage({
                   <div className="grid gap-2">
                     <Label htmlFor="customerPhone">Phone</Label>
                     <Input id="customerPhone" name="customerPhone" placeholder="+1 555 555 5555" />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="notes">Notes</Label>
+                    <Textarea id="notes" name="notes" placeholder="Anything the team should know before the appointment?" />
                   </div>
                   <Button type="submit" variant="secondary" disabled={slots.length === 0}>
                     Request demo booking

@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
 
 async function getStaff() {
@@ -47,6 +48,14 @@ export default async function DashboardStaffPage() {
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" name="email" type="email" placeholder="jane@example.com" />
               </div>
+              <div className="grid gap-2">
+                <Label htmlFor="roleTitle">Role</Label>
+                <Input id="roleTitle" name="roleTitle" placeholder="Lead coordinator" />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="bio">Bio</Label>
+                <Textarea id="bio" name="bio" placeholder="Short internal scheduling profile" />
+              </div>
               <Button type="submit">
                 <PlusCircle className="size-4" />
                 Add staff
@@ -66,6 +75,7 @@ export default async function DashboardStaffPage() {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
+                  <TableHead>Role</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
@@ -80,6 +90,12 @@ export default async function DashboardStaffPage() {
                     </TableCell>
                     <TableCell>
                       <Input form={`staff-${member.id}`} name="email" type="email" defaultValue={member.email ?? ""} />
+                    </TableCell>
+                    <TableCell>
+                      <div className="grid gap-2">
+                        <Input form={`staff-${member.id}`} name="roleTitle" defaultValue={member.roleTitle ?? ""} />
+                        <Textarea form={`staff-${member.id}`} name="bio" defaultValue={member.bio ?? ""} />
+                      </div>
                     </TableCell>
                     <TableCell>
                       <div className="grid gap-2">
@@ -101,7 +117,7 @@ export default async function DashboardStaffPage() {
                 ))}
                 {staff.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={3} className="text-muted-foreground">
+                    <TableCell colSpan={4} className="text-muted-foreground">
                       Aucun intervenant pour l instant. Lance Postgres puis ajoute le premier membre.
                     </TableCell>
                   </TableRow>
