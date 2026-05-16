@@ -11,6 +11,7 @@ export const bookingRequestSchema = z.object({
   customerName: z.string().trim().min(2, "Name is required"),
   customerEmail: z.string().trim().email("Valid email is required"),
   customerPhone: z.string().trim().optional(),
+  notes: z.string().trim().optional(),
   startAt: z.coerce.date(),
 });
 
@@ -23,6 +24,7 @@ export function parseBookingRequestFormData(formData: FormData) {
     customerName: formData.get("customerName"),
     customerEmail: formData.get("customerEmail"),
     customerPhone: formData.get("customerPhone") || undefined,
+    notes: formData.get("notes") || undefined,
     startAt: formData.get("startAt"),
   });
 
@@ -30,6 +32,7 @@ export function parseBookingRequestFormData(formData: FormData) {
     ...parsed,
     staffId: parsed.staffId || undefined,
     customerPhone: parsed.customerPhone || undefined,
+    notes: parsed.notes || undefined,
   };
 }
 

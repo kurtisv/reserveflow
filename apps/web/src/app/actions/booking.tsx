@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { BookingConfirmationEmail } from "@/emails/booking-confirmation";
 import { BookingStatus } from "@/generated/prisma";
+import { nanoid } from "nanoid";
 import { requireDashboardAccess } from "@/lib/dashboard-auth";
 import { sendTransactionalEmail } from "@/lib/email/resend";
 import { prisma } from "@/lib/db";
@@ -27,6 +28,7 @@ export async function createService(formData: FormData) {
     data: {
       name: service.name,
       slug: service.slug,
+      category: service.category,
       description: service.description,
       durationMin: service.durationMin,
       priceCents: service.priceCents,
@@ -52,6 +54,7 @@ export async function updateService(formData: FormData) {
     data: {
       name: service.name,
       slug: service.slug,
+      category: service.category,
       description: service.description,
       durationMin: service.durationMin,
       priceCents: service.priceCents,
@@ -87,6 +90,8 @@ export async function createStaffMember(formData: FormData) {
     data: {
       name: staff.name,
       email: staff.email,
+      roleTitle: staff.roleTitle,
+      bio: staff.bio,
     },
   });
 
@@ -109,6 +114,8 @@ export async function updateStaffMember(formData: FormData) {
     data: {
       name: staff.name,
       email: staff.email,
+      roleTitle: staff.roleTitle,
+      bio: staff.bio,
     },
   });
 
@@ -268,7 +275,7 @@ export async function createBookingRequest(formData: FormData) {
       where: {
         serviceId: bookingRequest.serviceId,
         staffId: bookingRequest.staffId,
-        status: { in: [BookingStatus.PENDING, BookingStatus.CONFIRMED] },
+        status: { in: [BookingStatus.REQUESTED, BookingStatus.CONFIRMED] },
         startAt: { lt: endAt },
         endAt: { gt: bookingRequest.startAt },
       },
@@ -292,9 +299,11 @@ export async function createBookingRequest(formData: FormData) {
         customerName: bookingRequest.customerName,
         customerEmail: bookingRequest.customerEmail,
         customerPhone: bookingRequest.customerPhone,
+        notes: bookingRequest.notes,
         startAt: bookingRequest.startAt,
         endAt,
-        status: BookingStatus.PENDING,
+        status: BookingStatus.REQUESTED,
+        publicToken: nanoid(16),
       },
     });
 

@@ -49,6 +49,10 @@ export default async function DashboardServicesPage() {
                 <Input id="slug" name="slug" placeholder="discovery-call" />
               </div>
               <div className="grid gap-2">
+                <Label htmlFor="category">Category</Label>
+                <Input id="category" name="category" placeholder="Consulting" defaultValue="General" />
+              </div>
+              <div className="grid gap-2">
                 <Label htmlFor="description">Description</Label>
                 <Textarea id="description" name="description" placeholder="Short client-facing summary" />
               </div>
@@ -81,6 +85,7 @@ export default async function DashboardServicesPage() {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Slug</TableHead>
+                  <TableHead>Category</TableHead>
                   <TableHead>Duration</TableHead>
                   <TableHead>Price</TableHead>
                 </TableRow>
@@ -97,6 +102,9 @@ export default async function DashboardServicesPage() {
                     </TableCell>
                     <TableCell>
                       <Input form={`service-${service.id}`} name="slug" defaultValue={service.slug} required />
+                    </TableCell>
+                    <TableCell>
+                      <Input form={`service-${service.id}`} name="category" defaultValue={service.category} required />
                     </TableCell>
                     <TableCell>
                       <Input
@@ -134,7 +142,7 @@ export default async function DashboardServicesPage() {
                 ))}
                 {services.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-muted-foreground">
+                    <TableCell colSpan={5} className="text-muted-foreground">
                       Aucun service pour l instant. Lance Postgres puis ajoute le premier service.
                     </TableCell>
                   </TableRow>

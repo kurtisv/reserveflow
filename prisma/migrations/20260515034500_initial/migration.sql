@@ -5,7 +5,7 @@ CREATE SCHEMA IF NOT EXISTS "public";
 CREATE TYPE "Role" AS ENUM ('ADMIN', 'OWNER', 'MEMBER', 'CUSTOMER');
 
 -- CreateEnum
-CREATE TYPE "BookingStatus" AS ENUM ('PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED', 'NO_SHOW');
+CREATE TYPE "BookingStatus" AS ENUM ('REQUESTED', 'CONFIRMED', 'CANCELLED', 'COMPLETED');
 
 -- CreateEnum
 CREATE TYPE "PaymentStatus" AS ENUM ('NOT_REQUIRED', 'PENDING', 'PAID', 'FAILED', 'REFUNDED');
@@ -86,6 +86,7 @@ CREATE TABLE "Service" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
+    "category" TEXT NOT NULL DEFAULT 'General',
     "description" TEXT,
     "durationMin" INTEGER NOT NULL,
     "priceCents" INTEGER,
@@ -101,6 +102,8 @@ CREATE TABLE "Staff" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT,
+    "roleTitle" TEXT,
+    "bio" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -141,9 +144,12 @@ CREATE TABLE "Booking" (
     "customerName" TEXT NOT NULL,
     "customerEmail" TEXT NOT NULL,
     "customerPhone" TEXT,
+    "notes" TEXT,
     "startAt" TIMESTAMP(3) NOT NULL,
     "endAt" TIMESTAMP(3) NOT NULL,
-    "status" "BookingStatus" NOT NULL DEFAULT 'PENDING',
+    "status" "BookingStatus" NOT NULL DEFAULT 'REQUESTED',
+    "source" TEXT NOT NULL DEFAULT 'public',
+    "publicToken" TEXT NOT NULL,
     "paymentStatus" "PaymentStatus" NOT NULL DEFAULT 'NOT_REQUIRED',
     "stripeSessionId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -241,10 +247,22 @@ CREATE UNIQUE INDEX "Membership_userId_organizationId_key" ON "Membership"("user
 CREATE UNIQUE INDEX "Service_slug_key" ON "Service"("slug");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Staff_email_key" ON "Staff"("email");
+
+-- CreateIndex
+CREATE INDEX "AvailabilityRule_staffId_weekday_idx" ON "AvailabilityRule"("staffId", "weekday");
+
+-- CreateIndex
+CREATE INDEX "AvailabilityException_staffId_date_idx" ON "AvailabilityException"("staffId", "date");
+
+-- CreateIndex
 CREATE INDEX "Booking_startAt_idx" ON "Booking"("startAt");
 
 -- CreateIndex
 CREATE INDEX "Booking_customerEmail_idx" ON "Booking"("customerEmail");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Booking_publicToken_key" ON "Booking"("publicToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Subscription_stripeSubscriptionId_key" ON "Subscription"("stripeSubscriptionId");
@@ -275,6 +293,12 @@ ALTER TABLE "Membership" ADD CONSTRAINT "Membership_userId_fkey" FOREIGN KEY ("u
 
 -- AddForeignKey
 ALTER TABLE "Membership" ADD CONSTRAINT "Membership_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AvailabilityRule" ADD CONSTRAINT "AvailabilityRule_staffId_fkey" FOREIGN KEY ("staffId") REFERENCES "Staff"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AvailabilityException" ADD CONSTRAINT "AvailabilityException_staffId_fkey" FOREIGN KEY ("staffId") REFERENCES "Staff"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Booking" ADD CONSTRAINT "Booking_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "Service"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

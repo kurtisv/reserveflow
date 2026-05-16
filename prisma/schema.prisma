@@ -81,6 +81,7 @@ model Service {
   id          String    @id @default(cuid())
   name        String
   slug        String    @unique
+  category    String    @default("General")
   description String?
   durationMin Int
   priceCents  Int?
@@ -91,13 +92,17 @@ model Service {
 }
 
 model Staff {
-  id        String    @id @default(cuid())
-  name      String
-  email     String?
-  isActive  Boolean   @default(true)
-  bookings  Booking[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id                     String                  @id @default(cuid())
+  name                   String
+  email                  String?                 @unique
+  roleTitle              String?
+  bio                    String?
+  isActive               Boolean                 @default(true)
+  bookings               Booking[]
+  availabilityRules      AvailabilityRule[]
+  availabilityExceptions AvailabilityException[]
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
 }
 
 model AvailabilityRule {
@@ -107,6 +112,9 @@ model AvailabilityRule {
   startTime String
   endTime   String
   timezone  String
+  staff     Staff  @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@index([staffId, weekday])
 }
 
 model AvailabilityException {
@@ -116,6 +124,9 @@ model AvailabilityException {
   startTime String?
   endTime   String?
   isClosed  Boolean  @default(false)
+  staff     Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@index([staffId, date])
 }
 
 model Booking {
@@ -126,9 +137,12 @@ model Booking {
   customerName    String
   customerEmail   String
   customerPhone   String?
+  notes           String?
   startAt         DateTime
   endAt           DateTime
-  status          BookingStatus @default(PENDING)
+  status          BookingStatus @default(REQUESTED)
+  source          String        @default("public")
+  publicToken     String        @unique
   paymentStatus   PaymentStatus @default(NOT_REQUIRED)
   stripeSessionId String?
   service         Service       @relation(fields: [serviceId], references: [id])
@@ -215,11 +229,10 @@ enum Role {
 }
 
 enum BookingStatus {
-  PENDING
+  REQUESTED
   CONFIRMED
   CANCELLED
   COMPLETED
-  NO_SHOW
 }
 
 enum PaymentStatus {

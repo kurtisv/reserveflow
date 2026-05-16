@@ -17,7 +17,7 @@ Build ReserveFlow as project 5 in the KV Web Starter portfolio series. This repo
 
 - [x] `main` - clean boilerplate copy committed and pushed.
 - [x] `01-foundation` - ReserveFlow naming, docs, baseline checks.
-- [ ] `02-booking-data-model` - Prisma models, seed, typed helpers.
+- [x] `02-booking-data-model` - Prisma models, seed, typed helpers.
 - [ ] `03-public-booking-flow` - landing, services, booking request, confirmation page.
 - [ ] `04-dashboard-bookings` - dashboard overview, booking list, detail, status actions.
 - [ ] `05-design-polish` - distinct visual identity, responsive polish, case study.
@@ -37,16 +37,16 @@ Build ReserveFlow as project 5 in the KV Web Starter portfolio series. This repo
 
 ## MVP feature checklist
 
-- [ ] Service catalog with duration, price, category, and description.
-- [ ] Staff/resource profiles with availability.
+- [x] Service catalog with duration, price, category, and description.
+- [x] Staff/resource profiles with availability.
 - [ ] Public booking request form.
-- [ ] Booking statuses: REQUESTED, CONFIRMED, COMPLETED, CANCELLED.
+- [x] Booking statuses: REQUESTED, CONFIRMED, COMPLETED, CANCELLED.
 - [ ] Confirmation/status page for a booking.
 - [ ] Dashboard stats for total, requested, confirmed, completed, cancelled, upcoming.
 - [ ] Booking list and detail screens.
 - [ ] Status update actions.
 - [ ] Confirmation email helper.
-- [ ] Demo seed data.
+- [x] Demo seed data.
 - [ ] Case study page.
 
 ## Design direction
@@ -64,3 +64,4 @@ ReserveFlow should feel light, precise, and operational. The visual language sho
 - Pushed the clean starter baseline to `main`.
 - Started `01-foundation`.
 - Completed ReserveFlow identity pass, removed inherited test database helper, and validated lint/typecheck/tests.
+- Completed `02-booking-data-model`: specialized Prisma booking schema, added service categories, staff profiles, availability relations, public booking tokens, customer notes, and richer demo seed data.
