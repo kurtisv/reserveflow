@@ -16,6 +16,7 @@ import { MarketingPageShell } from "@/components/marketing/page-shell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getCurrentLocale } from "@/lib/locale";
 
 const siteTypes = [
   {
@@ -140,32 +141,195 @@ const launchChecks = [
   "Verifier Sentry apres deploiement",
 ];
 
-export default function DocsPage() {
+const docsCopy = {
+  fr: {
+    heroBadge: "Mode d'emploi",
+    heroTitle: "Utiliser KV Web Starter selon le type de site a creer.",
+    heroIntro:
+      "Ce guide explique comment partir du boilerplate, choisir les modules utiles, configurer les services externes et valider un projet client avant livraison.",
+    apiReference: "Reference API",
+    developerPortal: "Portail developpeur",
+    quickStart: "Parcours rapide",
+    quickStartBody:
+      "Pour un nouveau client, commence par le script de copie, puis active seulement les modules necessaires.",
+    chooseBadge: "Choisir le bon depart",
+    chooseTitle: "Selon le site a livrer",
+    installBadge: "Installation",
+    installTitle: "Demarrage complet",
+    variablesBadge: "Variables",
+    variablesTitle: "Configuration par module",
+    usageBadge: "Utilisation",
+    usageTitle: "Exploiter les modules",
+    launchBadge: "Livraison",
+    launchTitle: "Checklist avant mise en ligne",
+    launchBody:
+      "Le projet est concu pour que la verification reste simple: les commandes de qualite couvrent lint, typecheck, tests unitaires, build et E2E.",
+    finalCheck: "Controle final",
+    siteTypes,
+    setupSteps,
+    envGroups,
+    adminWorkflows,
+    launchChecks,
+  },
+  en: {
+    heroBadge: "How to use",
+    heroTitle: "Use KV Web Starter according to the type of site you need to build.",
+    heroIntro:
+      "This guide explains how to start from the boilerplate, choose useful modules, configure external services, and validate a client project before delivery.",
+    apiReference: "API reference",
+    developerPortal: "Developer portal",
+    quickStart: "Quick path",
+    quickStartBody:
+      "For a new client, start with the copy script, then activate only the modules the project needs.",
+    chooseBadge: "Choose the right start",
+    chooseTitle: "By delivery type",
+    installBadge: "Installation",
+    installTitle: "Full setup",
+    variablesBadge: "Variables",
+    variablesTitle: "Configuration by module",
+    usageBadge: "Usage",
+    usageTitle: "Work with the modules",
+    launchBadge: "Delivery",
+    launchTitle: "Pre-launch checklist",
+    launchBody:
+      "The project is designed so verification stays simple: quality commands cover lint, typecheck, unit tests, build, and E2E.",
+    finalCheck: "Final control",
+    siteTypes: [
+      {
+        title: "Marketing site",
+        description:
+          "Use the public pages, contact form, SEO, testimonials, services, and CMS structure.",
+        steps: ["Adapt the brand and copy", "Configure Resend", "Check sitemap and metadata"],
+      },
+      {
+        title: "Booking site",
+        description:
+          "Activate services, staff, availability, exceptions, and the public booking form.",
+        steps: ["Seed the first service", "Configure staff and hours", "Test a complete booking"],
+      },
+      {
+        title: "SaaS or API portal",
+        description:
+          "Use Auth.js, API keys, scopes, Stripe, usage tracking, OpenAPI, and API documentation.",
+        steps: ["Configure OAuth and Stripe", "Create plans", "Verify API calls and quotas"],
+      },
+      {
+        title: "Hybrid project",
+        description:
+          "Combine marketing, booking, and paid API modules for a more complete client service.",
+        steps: ["Choose active modules", "Hide unused pages", "Test critical journeys"],
+      },
+    ],
+    setupSteps: [
+      {
+        title: "1. Create the client project",
+        body: "Copy the boilerplate with the provided script, then install dependencies in the new folder.",
+        command: setupSteps[0].command,
+      },
+      {
+        title: "2. Configure the environment",
+        body: "Copy .env.example to .env and fill the secrets for the modules you use.",
+        command: setupSteps[1].command,
+      },
+      {
+        title: "3. Initialize the database",
+        body: "Start local Postgres, generate Prisma, apply the migration, and add demo data.",
+        command: setupSteps[2].command,
+      },
+      {
+        title: "4. Start and verify",
+        body: "Start the server, open the site, test public pages, and sign in to the dashboard.",
+        command: setupSteps[3].command,
+      },
+    ],
+    envGroups: [
+      envGroups[0],
+      { title: "Authentication", items: envGroups[1].items },
+      envGroups[2],
+      envGroups[3],
+    ],
+    adminWorkflows: [
+      {
+        title: "Dashboard",
+        icon: ShieldCheck,
+        items: [
+          "Sign in with GitHub OAuth in production.",
+          "Keep demo login for local development only.",
+          "Grant admin access with an OWNER or ADMIN membership.",
+        ],
+      },
+      {
+        title: "Bookings",
+        icon: CalendarDays,
+        items: [
+          "Create the services being sold.",
+          "Add available staff.",
+          "Configure hours and exceptions.",
+          "Test a public slot on /booking.",
+        ],
+      },
+      {
+        title: "Paid API",
+        icon: KeyRound,
+        items: [
+          "Create an API key in the dashboard.",
+          "Verify scopes.",
+          "Track calls in API Usage.",
+          "Activate Stripe to limit keys to paid plans.",
+        ],
+      },
+      {
+        title: "Billing",
+        icon: CreditCard,
+        items: [
+          "Create products and prices in Stripe.",
+          "Copy price IDs into .env.",
+          "Test the webhook with Stripe CLI.",
+          "Verify the Customer Portal.",
+        ],
+      },
+    ],
+    launchChecks: [
+      "pnpm check",
+      "pnpm build",
+      "pnpm test:e2e",
+      "Test /contact with Resend",
+      "Test /booking with real availability",
+      "Test /api/v1/demo with a DB key",
+      "Test Stripe Checkout and webhook",
+      "Verify Sentry after deployment",
+    ],
+  },
+};
+
+export default async function DocsPage() {
+  const locale = await getCurrentLocale();
+  const t = docsCopy[locale];
+
   return (
     <MarketingPageShell>
       <main>
         <section className="border-b bg-secondary/40">
           <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 lg:grid-cols-[1fr_0.8fr]">
             <div>
-              <Badge>Mode d&apos;emploi</Badge>
+              <Badge>{t.heroBadge}</Badge>
               <h1 className="mt-5 text-4xl font-semibold tracking-normal text-balance sm:text-5xl">
-                Utiliser KV Web Starter selon le type de site a creer.
+                {t.heroTitle}
               </h1>
               <p className="mt-5 max-w-3xl text-lg leading-8 text-muted-foreground">
-                Ce guide explique comment partir du boilerplate, choisir les modules utiles,
-                configurer les services externes et valider un projet client avant livraison.
+                {t.heroIntro}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button asChild>
                   <Link href="/docs/api">
                     <Code2 className="size-4" />
-                    Reference API
+                    {t.apiReference}
                   </Link>
                 </Button>
                 <Button asChild variant="secondary">
                   <Link href="/developers">
                     <BookOpenCheck className="size-4" />
-                    Portail developpeur
+                    {t.developerPortal}
                   </Link>
                 </Button>
               </div>
@@ -174,16 +338,15 @@ export default function DocsPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-3 text-base">
                   <Rocket className="size-4" />
-                  Parcours rapide
+                  {t.quickStart}
                 </CardTitle>
                 <CardDescription>
-                  Pour un nouveau client, commence par le script de copie, puis active seulement
-                  les modules necessaires.
+                  {t.quickStartBody}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <pre className="overflow-x-auto border bg-background p-4 text-xs">
-                  <code>{setupSteps[0].command}</code>
+                  <code>{t.setupSteps[0].command}</code>
                 </pre>
               </CardContent>
             </Card>
@@ -192,11 +355,11 @@ export default function DocsPage() {
 
         <section className="mx-auto max-w-6xl px-6 py-14">
           <div className="max-w-3xl">
-            <Badge>Choisir le bon depart</Badge>
-            <h2 className="mt-4 text-3xl font-semibold tracking-normal">Selon le site a livrer</h2>
+            <Badge>{t.chooseBadge}</Badge>
+            <h2 className="mt-4 text-3xl font-semibold tracking-normal">{t.chooseTitle}</h2>
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-2">
-            {siteTypes.map((type) => (
+            {t.siteTypes.map((type) => (
               <Card key={type.title}>
                 <CardHeader>
                   <CardTitle className="text-lg">{type.title}</CardTitle>
@@ -219,10 +382,10 @@ export default function DocsPage() {
 
         <section className="border-y bg-muted/50">
           <div className="mx-auto max-w-6xl px-6 py-14">
-            <Badge>Installation</Badge>
-            <h2 className="mt-4 text-3xl font-semibold tracking-normal">Demarrage complet</h2>
+            <Badge>{t.installBadge}</Badge>
+            <h2 className="mt-4 text-3xl font-semibold tracking-normal">{t.installTitle}</h2>
             <div className="mt-8 grid gap-4">
-              {setupSteps.map((step) => (
+              {t.setupSteps.map((step) => (
                 <Card key={step.title}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-3 text-base">
@@ -243,10 +406,10 @@ export default function DocsPage() {
         </section>
 
         <section className="mx-auto max-w-6xl px-6 py-14">
-          <Badge>Variables</Badge>
-          <h2 className="mt-4 text-3xl font-semibold tracking-normal">Configuration par module</h2>
+          <Badge>{t.variablesBadge}</Badge>
+          <h2 className="mt-4 text-3xl font-semibold tracking-normal">{t.variablesTitle}</h2>
           <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {envGroups.map((group) => (
+            {t.envGroups.map((group) => (
               <Card key={group.title}>
                 <CardHeader>
                   <CardTitle className="text-base">{group.title}</CardTitle>
@@ -267,10 +430,10 @@ export default function DocsPage() {
 
         <section className="border-y bg-secondary/40">
           <div className="mx-auto max-w-6xl px-6 py-14">
-            <Badge>Utilisation</Badge>
-            <h2 className="mt-4 text-3xl font-semibold tracking-normal">Exploiter les modules</h2>
+            <Badge>{t.usageBadge}</Badge>
+            <h2 className="mt-4 text-3xl font-semibold tracking-normal">{t.usageTitle}</h2>
             <div className="mt-8 grid gap-4 md:grid-cols-2">
-              {adminWorkflows.map((workflow) => (
+              {t.adminWorkflows.map((workflow) => (
                 <Card key={workflow.title}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-3 text-base">
@@ -296,23 +459,22 @@ export default function DocsPage() {
 
         <section className="mx-auto grid max-w-6xl gap-8 px-6 py-14 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
-            <Badge>Livraison</Badge>
-            <h2 className="mt-4 text-3xl font-semibold tracking-normal">Checklist avant mise en ligne</h2>
+            <Badge>{t.launchBadge}</Badge>
+            <h2 className="mt-4 text-3xl font-semibold tracking-normal">{t.launchTitle}</h2>
             <p className="mt-4 text-muted-foreground">
-              Le projet est concu pour que la verification reste simple: les commandes de
-              qualite couvrent lint, typecheck, tests unitaires, build et E2E.
+              {t.launchBody}
             </p>
           </div>
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-3 text-base">
                 <FileText className="size-4" />
-                Controle final
+                {t.finalCheck}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-                {launchChecks.map((check) => (
+                {t.launchChecks.map((check) => (
                   <li key={check} className="flex gap-2">
                     <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-foreground" />
                     <span>{check}</span>

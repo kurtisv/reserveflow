@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
+import { getCurrentLocale } from "@/lib/locale";
 import { generateBookingSlots } from "@/modules/booking";
 
 const demoServices = [
@@ -31,6 +32,61 @@ const demoServices = [
 
 const fallbackStaff = [{ id: undefined, name: "Any staff" }];
 const fallbackBookingDate = "2026-05-18";
+
+const copy = {
+  fr: {
+    eyebrow: "MVP reservation",
+    title: "Reservation claire pour services, equipe et disponibilites.",
+    intro:
+      "Cette page pose le flux public: choisir un service, choisir un creneau disponible, puis confirmer les informations client.",
+    benefits: [
+      "Disponibilites calculees par regles, exceptions et reservations.",
+      "Pret pour connexion Prisma, paiement Stripe et rappels Resend.",
+    ],
+    choiceTitle: "Choix",
+    fallbackData: "Donnees demo si la DB est vide ou indisponible.",
+    prismaData: "Services actifs depuis Prisma.",
+    staff: "Equipe",
+    updateAvailability: "Mettre a jour les disponibilites",
+    bookingTitle: "Demande de reservation",
+    bookingDescription: "heure UTC pour le scaffold.",
+    slot: "Creneau",
+    noSlots: "Aucun creneau disponible pour cette selection.",
+    name: "Nom",
+    phone: "Telephone",
+    notes: "Notes",
+    notesPlaceholder: "Informations utiles pour preparer le rendez-vous?",
+    submit: "Envoyer la demande demo",
+    free: "Gratuit",
+    anyStaff: "Toute l'equipe",
+  },
+  en: {
+    eyebrow: "Booking MVP",
+    title: "Clear booking for services, staff, and availability.",
+    intro:
+      "This page sets the public flow: choose a service, choose an available slot, then confirm the customer details.",
+    benefits: [
+      "Availability calculated from rules, exceptions, and bookings.",
+      "Ready for Prisma connection, Stripe payment, and Resend reminders.",
+    ],
+    choiceTitle: "Selection",
+    fallbackData: "Demo data is shown if the database is empty or unavailable.",
+    prismaData: "Active services from Prisma.",
+    staff: "Staff",
+    updateAvailability: "Update availability",
+    bookingTitle: "Booking request",
+    bookingDescription: "UTC time for the scaffold.",
+    slot: "Slot",
+    noSlots: "No slots available for this selection.",
+    name: "Name",
+    phone: "Phone",
+    notes: "Notes",
+    notesPlaceholder: "Anything the team should know before the appointment?",
+    submit: "Request demo booking",
+    free: "Free",
+    anyStaff: "Any staff",
+  },
+};
 
 type BookingSearchParams = {
   serviceId?: string;
@@ -96,8 +152,8 @@ async function getBookingData(bookingDate: string) {
   }
 }
 
-function formatPrice(priceCents: number | null) {
-  return priceCents ? `$${(priceCents / 100).toFixed(2)}` : "Free";
+function formatPrice(priceCents: number | null, freeLabel: string) {
+  return priceCents ? `$${(priceCents / 100).toFixed(2)}` : freeLabel;
 }
 
 function normalizeBookingDate(date?: string) {
@@ -109,6 +165,8 @@ export default async function BookingPage({
 }: {
   searchParams?: Promise<BookingSearchParams>;
 }) {
+  const locale = await getCurrentLocale();
+  const t = copy[locale];
   const params = (await searchParams) ?? {};
   const selectedDate = normalizeBookingDate(params.date);
   const data = await getBookingData(selectedDate);
@@ -140,35 +198,30 @@ export default async function BookingPage({
         <section className="mx-auto grid w-full max-w-6xl gap-10 px-6 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
             <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-primary">
-              Booking MVP
+              {t.eyebrow}
             </p>
             <h1 className="text-4xl font-semibold tracking-normal text-balance sm:text-5xl">
-              Reservation claire pour services, staff et disponibilites.
+              {t.title}
             </h1>
             <p className="mt-5 text-lg leading-8 text-muted-foreground">
-              Cette page pose le flux public: choisir un service, choisir un
-              creneau disponible, puis confirmer les informations client.
+              {t.intro}
             </p>
             <div className="mt-8 grid gap-3 text-sm text-muted-foreground">
-              <div className="flex items-center gap-3">
-                <CheckCircle2 className="size-4 text-foreground" />
-                Disponibilites calculees par regles, exceptions et bookings.
-              </div>
-              <div className="flex items-center gap-3">
-                <CheckCircle2 className="size-4 text-foreground" />
-                Pret pour connexion Prisma, paiement Stripe et rappels Resend.
-              </div>
+              {t.benefits.map((benefit) => (
+                <div key={benefit} className="flex items-center gap-3">
+                  <CheckCircle2 className="size-4 text-foreground" />
+                  {benefit}
+                </div>
+              ))}
             </div>
           </div>
 
           <div className="grid gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>Choix</CardTitle>
+                <CardTitle>{t.choiceTitle}</CardTitle>
                 <CardDescription>
-                  {data.usingFallback
-                    ? "Donnees demo si la DB est vide ou indisponible."
-                    : "Services actifs depuis Prisma."}
+                  {data.usingFallback ? t.fallbackData : t.prismaData}
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-5">
@@ -189,7 +242,7 @@ export default async function BookingPage({
                     </select>
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="staffId">Staff</Label>
+                    <Label htmlFor="staffId">{t.staff}</Label>
                     <select
                       id="staffId"
                       name="staffId"
@@ -198,7 +251,7 @@ export default async function BookingPage({
                     >
                       {data.staff.map((staff) => (
                         <option key={staff.id ?? "any"} value={staff.id}>
-                          {staff.name}
+                          {staff.id ? staff.name : t.anyStaff}
                         </option>
                       ))}
                     </select>
@@ -208,7 +261,7 @@ export default async function BookingPage({
                     <Input id="date" name="date" type="date" defaultValue={selectedDate} />
                   </div>
                   <Button type="submit" variant="secondary">
-                    Update availability
+                    {t.updateAvailability}
                   </Button>
                 </form>
 
@@ -216,7 +269,9 @@ export default async function BookingPage({
                   <div key={service.id} className="border p-4">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <h2 className="font-medium">{service.name}</h2>
-                      <span className="text-sm font-medium">{formatPrice(service.priceCents)}</span>
+                      <span className="text-sm font-medium">
+                        {formatPrice(service.priceCents, t.free)}
+                      </span>
                     </div>
                     <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
                       {service.category}
@@ -235,20 +290,22 @@ export default async function BookingPage({
 
             <Card>
               <CardHeader>
-                <CardTitle>Demande de reservation</CardTitle>
-                <CardDescription>{selectedDate}, heure UTC pour le scaffold.</CardDescription>
+                <CardTitle>{t.bookingTitle}</CardTitle>
+                <CardDescription>
+                  {selectedDate}, {t.bookingDescription}
+                </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-5">
                 <form action={createBookingRequest} className="grid gap-4 border-t pt-5">
                   <input name="serviceId" type="hidden" value={selectedService.id} />
                   {selectedStaff.id ? <input name="staffId" type="hidden" value={selectedStaff.id} /> : null}
                   <div className="grid gap-2">
-                    <Label>Creneau</Label>
+                    <Label>{t.slot}</Label>
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                       {slots.map((slot, index) => (
                         <label
                           key={slot.startTime}
-                            className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border bg-secondary px-3 text-sm font-medium text-secondary-foreground has-[:checked]:border-primary has-[:checked]:bg-primary has-[:checked]:text-primary-foreground"
+                          className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border bg-secondary px-3 text-sm font-medium text-secondary-foreground has-[:checked]:border-primary has-[:checked]:bg-primary has-[:checked]:text-primary-foreground"
                         >
                           <input
                             className="sr-only"
@@ -264,11 +321,11 @@ export default async function BookingPage({
                       ))}
                     </div>
                     {slots.length === 0 ? (
-                      <p className="text-sm text-muted-foreground">Aucun creneau disponible pour cette selection.</p>
+                      <p className="text-sm text-muted-foreground">{t.noSlots}</p>
                     ) : null}
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="customerName">Name</Label>
+                    <Label htmlFor="customerName">{t.name}</Label>
                     <Input id="customerName" name="customerName" placeholder="Client Example" required />
                   </div>
                   <div className="grid gap-2">
@@ -282,15 +339,15 @@ export default async function BookingPage({
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="customerPhone">Phone</Label>
+                    <Label htmlFor="customerPhone">{t.phone}</Label>
                     <Input id="customerPhone" name="customerPhone" placeholder="+1 555 555 5555" />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="notes">Notes</Label>
-                    <Textarea id="notes" name="notes" placeholder="Anything the team should know before the appointment?" />
+                    <Label htmlFor="notes">{t.notes}</Label>
+                    <Textarea id="notes" name="notes" placeholder={t.notesPlaceholder} />
                   </div>
                   <Button type="submit" variant="secondary" disabled={slots.length === 0}>
-                    Request demo booking
+                    {t.submit}
                   </Button>
                 </form>
               </CardContent>

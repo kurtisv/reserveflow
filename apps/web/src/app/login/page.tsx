@@ -6,12 +6,34 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { auth } from "@/lib/auth";
 import { env } from "@/lib/env";
+import { getCurrentLocale } from "@/lib/locale";
+
+const copy = {
+  fr: {
+    title: "Connexion",
+    description: "Acces administrateur pour le boilerplate.",
+    invalid: "Identifiants invalides.",
+    github: "Se connecter avec GitHub",
+    password: "Mot de passe",
+    submit: "Se connecter",
+  },
+  en: {
+    title: "Sign in",
+    description: "Administrator access for the boilerplate.",
+    invalid: "Invalid credentials.",
+    github: "Sign in with GitHub",
+    password: "Password",
+    submit: "Sign in",
+  },
+};
 
 export default async function LoginPage({
   searchParams,
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
+  const locale = await getCurrentLocale();
+  const t = copy[locale];
   const session = await auth();
 
   if (session?.user) {
@@ -24,20 +46,20 @@ export default async function LoginPage({
     <main className="flex min-h-screen items-center justify-center bg-muted px-6 py-12">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Connexion</CardTitle>
-          <CardDescription>Acces administrateur pour le boilerplate.</CardDescription>
+          <CardTitle>{t.title}</CardTitle>
+          <CardDescription>{t.description}</CardDescription>
         </CardHeader>
         <CardContent>
           {params.error ? (
             <p className="mb-4 border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-              Identifiants invalides.
+              {t.invalid}
             </p>
           ) : null}
           <div className="grid gap-4">
             {env.AUTH_GITHUB_ID && env.AUTH_GITHUB_SECRET ? (
               <form action={signInWithGitHub}>
                 <Button className="w-full" type="submit">
-                  Se connecter avec GitHub
+                  {t.github}
                 </Button>
               </form>
             ) : null}
@@ -55,10 +77,10 @@ export default async function LoginPage({
                   autoComplete="current-password"
                   defaultValue={env.AUTH_DEMO_PASSWORD}
                   name="password"
-                  placeholder="Mot de passe"
+                  placeholder={t.password}
                   type="password"
                 />
-                <Button type="submit">Se connecter</Button>
+                <Button type="submit">{t.submit}</Button>
               </form>
             ) : null}
           </div>

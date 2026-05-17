@@ -6,6 +6,34 @@ import { MarketingPageShell } from "@/components/marketing/page-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { prisma } from "@/lib/db";
+import { getCurrentLocale } from "@/lib/locale";
+
+const copy = {
+  fr: {
+    received: "Reservation recue",
+    title: "Votre demande est dans la file ReserveFlow.",
+    intro: (status: string) =>
+      `Le rendez-vous est sauvegarde comme ${status.toLowerCase()}. L'equipe operations peut le confirmer, le terminer ou l'annuler depuis le tableau de bord.`,
+    appointment: "Rendez-vous",
+    duration: "Duree",
+    client: "Client",
+    email: "Email",
+    requestAnother: "Faire une autre demande",
+    caseStudy: "Voir l'etude de cas",
+  },
+  en: {
+    received: "Booking received",
+    title: "Your request is in the ReserveFlow queue.",
+    intro: (status: string) =>
+      `The appointment is saved as ${status.toLowerCase()}. The operations team can confirm, complete, or cancel it from the dashboard.`,
+    appointment: "Appointment",
+    duration: "Duration",
+    client: "Client",
+    email: "Email",
+    requestAnother: "Request another booking",
+    caseStudy: "View project case study",
+  },
+};
 
 async function getBooking(publicToken: string) {
   try {
@@ -21,8 +49,8 @@ async function getBooking(publicToken: string) {
   }
 }
 
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-CA", {
+function formatDate(date: Date, locale: "fr" | "en") {
+  return new Intl.DateTimeFormat(locale === "fr" ? "fr-CA" : "en-CA", {
     dateStyle: "full",
     timeStyle: "short",
     timeZone: "UTC",
@@ -34,6 +62,8 @@ export default async function BookingConfirmationPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const locale = await getCurrentLocale();
+  const t = copy[locale];
   const { id } = await params;
   const booking = await getBooking(id);
 
@@ -46,14 +76,13 @@ export default async function BookingConfirmationPage({
       <main className="mx-auto grid w-full max-w-5xl gap-8 px-6 py-16 sm:py-24">
         <div className="max-w-3xl">
           <p className="text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
-            Booking received
+            {t.received}
           </p>
           <h1 className="mt-4 text-4xl font-semibold tracking-normal text-balance sm:text-5xl">
-            Your request is in the ReserveFlow queue.
+            {t.title}
           </h1>
           <p className="mt-5 text-lg leading-8 text-muted-foreground">
-            The appointment is saved as {booking.status.toLowerCase()}. The operations
-            team can confirm, complete, or cancel it from the dashboard.
+            {t.intro(booking.status)}
           </p>
         </div>
 
@@ -65,28 +94,28 @@ export default async function BookingConfirmationPage({
             <div className="flex gap-3">
               <CalendarCheck2 className="mt-1 size-4" />
               <div>
-                <p className="font-medium">Appointment</p>
-                <p className="mt-1 text-muted-foreground">{formatDate(booking.startAt)}</p>
+                <p className="font-medium">{t.appointment}</p>
+                <p className="mt-1 text-muted-foreground">{formatDate(booking.startAt, locale)}</p>
               </div>
             </div>
             <div className="flex gap-3">
               <Clock3 className="mt-1 size-4" />
               <div>
-                <p className="font-medium">Duration</p>
+                <p className="font-medium">{t.duration}</p>
                 <p className="mt-1 text-muted-foreground">{booking.service.durationMin} minutes</p>
               </div>
             </div>
             <div className="flex gap-3">
               <UserRound className="mt-1 size-4" />
               <div>
-                <p className="font-medium">Client</p>
+                <p className="font-medium">{t.client}</p>
                 <p className="mt-1 text-muted-foreground">{booking.customerName}</p>
               </div>
             </div>
             <div className="flex gap-3">
               <Mail className="mt-1 size-4" />
               <div>
-                <p className="font-medium">Email</p>
+                <p className="font-medium">{t.email}</p>
                 <p className="mt-1 text-muted-foreground">{booking.customerEmail}</p>
               </div>
             </div>
@@ -95,10 +124,10 @@ export default async function BookingConfirmationPage({
 
         <div className="flex flex-wrap gap-3">
           <Button asChild>
-            <Link href="/booking">Request another booking</Link>
+            <Link href="/booking">{t.requestAnother}</Link>
           </Button>
           <Button asChild variant="secondary">
-            <Link href="/case-study">View project case study</Link>
+            <Link href="/case-study">{t.caseStudy}</Link>
           </Button>
         </div>
       </main>
