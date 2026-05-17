@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { EcosystemNotificationPanel } from "@/components/ecosystem/notification-panel";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { prisma } from "@/lib/db";
+import { getIncomingEcosystemEvents } from "@/lib/ecosystem";
 
 async function getDashboardStats() {
   try {
@@ -43,7 +44,10 @@ const cards = [
 ] as const;
 
 export default async function DashboardPage() {
-  const stats = await getDashboardStats();
+  const [stats, acceptedQuotes] = await Promise.all([
+    getDashboardStats(),
+    getIncomingEcosystemEvents("reserveflow", "quote.accepted", 8),
+  ]);
 
   return (
     <main className="px-6 py-10 text-foreground">
@@ -86,6 +90,47 @@ export default async function DashboardPage() {
             <Badge>Confirmed {stats.confirmed}</Badge>
             <Badge>Completed {stats.completed}</Badge>
             <Badge>Cancelled {stats.cancelled}</Badge>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Demandes pretes a planifier</CardTitle>
+            <CardDescription>
+              Soumissions acceptees dans QuotePilot avec le contexte client et le meme flowId.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3">
+            {acceptedQuotes.map((event) => {
+              const payload = typeof event.payload === "object" && event.payload !== null
+                ? event.payload as Record<string, unknown>
+                : {};
+              const href = `/booking?flowId=${encodeURIComponent(event.flowId)}&quoteId=${encodeURIComponent(String(event.entityId ?? ""))}&customerName=${encodeURIComponent(event.customerName ?? "")}&customerEmail=${encodeURIComponent(event.customerEmail ?? "")}&amount=${encodeURIComponent(String(payload.totalCents ?? ""))}&consultant=${encodeURIComponent(String(payload.consultantName ?? "Maya Laurent"))}&need=${encodeURIComponent(event.description ?? "")}&quoteNumber=${encodeURIComponent(String(payload.quoteNumber ?? ""))}&sourceEventId=${encodeURIComponent(event.id)}`;
+
+              return (
+                <article key={event.id} className="grid gap-4 rounded-md border bg-background p-4 md:grid-cols-[1fr_auto]">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge>QuotePilot</Badge>
+                      <span className="font-mono text-xs text-muted-foreground">{event.flowId}</span>
+                    </div>
+                    <h3 className="mt-3 font-semibold">{event.customerName ?? "Client QuotePilot"}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Soumission {String(payload.quoteNumber ?? event.entityId ?? "-")} · Montant {String(payload.totalCents ?? "-")}
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">{event.description}</p>
+                  </div>
+                  <Link href={href} className="inline-flex items-center gap-2 self-center text-sm font-medium">
+                    Planifier le rendez-vous <ArrowRight className="size-4" />
+                  </Link>
+                </article>
+              );
+            })}
+            {acceptedQuotes.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                Aucune soumission acceptee pour l'instant. Accepte une soumission dans QuotePilot pour alimenter cette file.
+              </p>
+            ) : null}
           </CardContent>
         </Card>
 

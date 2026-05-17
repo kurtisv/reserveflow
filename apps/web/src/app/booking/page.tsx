@@ -100,6 +100,15 @@ type BookingSearchParams = {
   serviceId?: string;
   staffId?: string;
   date?: string;
+  flowId?: string;
+  quoteId?: string;
+  customerName?: string;
+  customerEmail?: string;
+  amount?: string;
+  consultant?: string;
+  need?: string;
+  quoteNumber?: string;
+  sourceEventId?: string;
 };
 
 async function getBookingData(bookingDate: string) {
@@ -176,6 +185,7 @@ export default async function BookingPage({
   const locale = await getCurrentLocale();
   const t = copy[locale];
   const params = (await searchParams) ?? {};
+  const hasQuotePilotContext = Boolean(params.flowId || params.quoteId);
   const selectedDate = normalizeBookingDate(params.date);
   const data = await getBookingData(selectedDate);
   const selectedService =
@@ -300,13 +310,31 @@ export default async function BookingPage({
               <CardHeader>
                 <CardTitle>{t.bookingTitle}</CardTitle>
                 <CardDescription>
-                  {selectedDate}, {t.bookingDescription}
+                  {hasQuotePilotContext
+                    ? "Contexte QuotePilot recu: soumission acceptee prete a planifier."
+                    : `${selectedDate}, ${t.bookingDescription}`}
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-5">
+                {hasQuotePilotContext ? (
+                  <div className="rounded-md border border-primary/30 bg-primary-soft p-4 text-sm">
+                    <p className="font-semibold">Demande prete a planifier</p>
+                    <p className="mt-2 text-muted-foreground">
+                      {params.customerName ?? "Client"} · {params.consultant ?? "Consultant a confirmer"}
+                    </p>
+                    <p className="mt-2 font-mono text-xs text-muted-foreground">flowId: {params.flowId}</p>
+                  </div>
+                ) : null}
                 <form action={createBookingRequest} className="grid gap-4 border-t pt-5">
                   <input name="serviceId" type="hidden" value={selectedService.id} />
                   {selectedStaff.id ? <input name="staffId" type="hidden" value={selectedStaff.id} /> : null}
+                  {params.flowId ? <input name="flowId" type="hidden" value={params.flowId} /> : null}
+                  {params.quoteId ? <input name="quoteId" type="hidden" value={params.quoteId} /> : null}
+                  {params.sourceEventId ? <input name="sourceEventId" type="hidden" value={params.sourceEventId} /> : null}
+                  <input name="sourceApp" type="hidden" value="quotepilot" />
+                  {params.consultant ? <input name="consultantName" type="hidden" value={params.consultant} /> : null}
+                  {params.quoteNumber ? <input name="quoteNumber" type="hidden" value={params.quoteNumber} /> : null}
+                  {params.amount ? <input name="quoteTotalCents" type="hidden" value={params.amount} /> : null}
                   <div className="grid gap-2">
                     <Label>{t.slot}</Label>
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -334,7 +362,7 @@ export default async function BookingPage({
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="customerName">{t.name}</Label>
-                    <Input id="customerName" name="customerName" placeholder="Client Example" required />
+                    <Input id="customerName" name="customerName" placeholder="Client Example" defaultValue={params.customerName} required />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="customerEmail">Email</Label>
@@ -343,6 +371,7 @@ export default async function BookingPage({
                       name="customerEmail"
                       type="email"
                       placeholder="client@example.com"
+                      defaultValue={params.customerEmail}
                       required
                     />
                   </div>
@@ -352,7 +381,7 @@ export default async function BookingPage({
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="notes">{t.notes}</Label>
-                    <Textarea id="notes" name="notes" placeholder={t.notesPlaceholder} />
+                    <Textarea id="notes" name="notes" placeholder={t.notesPlaceholder} defaultValue={params.need} />
                   </div>
                   <Button type="submit" variant="secondary" disabled={slots.length === 0}>
                     {t.submit}

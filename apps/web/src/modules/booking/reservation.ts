@@ -13,6 +13,13 @@ export const bookingRequestSchema = z.object({
   customerPhone: z.string().trim().optional(),
   notes: z.string().trim().optional(),
   startAt: z.coerce.date(),
+  flowId: z.string().trim().optional(),
+  sourceApp: z.string().trim().optional(),
+  sourceEventId: z.string().trim().optional(),
+  consultantName: z.string().trim().optional(),
+  quoteNumber: z.string().trim().optional(),
+  quoteTotalCents: z.coerce.number().int().optional(),
+  quoteId: z.string().trim().optional(),
 });
 
 export type BookingRequestInput = z.infer<typeof bookingRequestSchema>;
@@ -26,6 +33,13 @@ export function parseBookingRequestFormData(formData: FormData) {
     customerPhone: formData.get("customerPhone") || undefined,
     notes: formData.get("notes") || undefined,
     startAt: formData.get("startAt"),
+    flowId: formData.get("flowId") || undefined,
+    sourceApp: formData.get("sourceApp") || undefined,
+    sourceEventId: formData.get("sourceEventId") || undefined,
+    consultantName: formData.get("consultantName") || undefined,
+    quoteNumber: formData.get("quoteNumber") || undefined,
+    quoteTotalCents: formData.get("quoteTotalCents") || undefined,
+    quoteId: formData.get("quoteId") || undefined,
   });
 
   return {
@@ -33,6 +47,13 @@ export function parseBookingRequestFormData(formData: FormData) {
     staffId: parsed.staffId || undefined,
     customerPhone: parsed.customerPhone || undefined,
     notes: parsed.notes || undefined,
+    flowId: parsed.flowId || undefined,
+    sourceApp: parsed.sourceApp || undefined,
+    sourceEventId: parsed.sourceEventId || undefined,
+    consultantName: parsed.consultantName || undefined,
+    quoteNumber: parsed.quoteNumber || undefined,
+    quoteTotalCents: parsed.quoteTotalCents || undefined,
+    quoteId: parsed.quoteId || undefined,
   };
 }
 

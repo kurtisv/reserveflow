@@ -9,7 +9,7 @@ import { BookingStatus } from "@/generated/prisma";
 import { requireDashboardAccess } from "@/lib/dashboard-auth";
 import { sendTransactionalEmail } from "@/lib/email/resend";
 import { prisma } from "@/lib/db";
-import { publishEcosystemEvent } from "@/lib/ecosystem";
+import { linkEcosystemEntities, publishEcosystemEvent } from "@/lib/ecosystem";
 import {
   calculateBookingEndAt,
   hasBookingConflict,
@@ -326,6 +326,18 @@ export async function createBookingRequest(formData: FormData) {
         endAt,
         status: BookingStatus.REQUESTED,
         publicToken: nanoid(16),
+        flowId: bookingRequest.flowId,
+        sourceApp: bookingRequest.sourceApp,
+        sourceEventId: bookingRequest.sourceEventId,
+        consultantName: bookingRequest.consultantName,
+        quoteNumber: bookingRequest.quoteNumber,
+        quoteTotalCents: bookingRequest.quoteTotalCents,
+        contextJson: {
+          quoteId: bookingRequest.quoteId,
+          sourceApp: bookingRequest.sourceApp,
+          sourceEventId: bookingRequest.sourceEventId,
+          consultantName: bookingRequest.consultantName,
+        },
       },
     });
 
@@ -338,6 +350,10 @@ export async function createBookingRequest(formData: FormData) {
         publicToken: booking.publicToken,
         startAt: booking.startAt,
         serviceName: service.name,
+        flowId: booking.flowId,
+        sourceApp: booking.sourceApp,
+        sourceEventId: booking.sourceEventId,
+        quoteId: bookingRequest.quoteId,
       },
     };
   });
@@ -359,6 +375,7 @@ export async function createBookingRequest(formData: FormData) {
   });
 
   await publishEcosystemEvent({
+    flowId: result.booking.flowId ?? undefined,
     sourceApp: "reserveflow",
     targetApps: ["clienthub", "api-meter"],
     eventType: "booking.created",
@@ -372,11 +389,25 @@ export async function createBookingRequest(formData: FormData) {
       publicToken: result.booking.publicToken,
       serviceName: result.booking.serviceName,
       startAt: result.booking.startAt.toISOString(),
+      quoteId: result.booking.quoteId,
+      sourceEventId: result.booking.sourceEventId,
     },
     priority: "NORMAL",
     actionLabel: "Ouvrir ClientHub",
     actionUrl: "/dashboard",
   });
+
+  if (result.booking.flowId && result.booking.quoteId) {
+    await linkEcosystemEntities({
+      flowId: result.booking.flowId,
+      fromApp: result.booking.sourceApp ?? "quotepilot",
+      fromEntityType: "quote",
+      fromEntityId: result.booking.quoteId,
+      toApp: "reserveflow",
+      toEntityType: "booking",
+      toEntityId: result.booking.id,
+    });
+  }
 
   revalidatePath("/dashboard/bookings");
   redirect(`/booking/${result.booking.publicToken}`);

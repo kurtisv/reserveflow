@@ -145,6 +145,13 @@ model Booking {
   publicToken     String        @unique
   paymentStatus   PaymentStatus @default(NOT_REQUIRED)
   stripeSessionId String?
+  flowId          String?
+  sourceApp       String?
+  sourceEventId   String?
+  consultantName  String?
+  quoteNumber     String?
+  quoteTotalCents Int?
+  contextJson     Json?
   service         Service       @relation(fields: [serviceId], references: [id])
   staff           Staff?        @relation(fields: [staffId], references: [id])
   user            User?         @relation(fields: [userId], references: [id])
@@ -153,6 +160,7 @@ model Booking {
 
   @@index([startAt])
   @@index([customerEmail])
+  @@index([flowId])
 }
 
 model Subscription {
