@@ -45,6 +45,13 @@ const cards = [
 
 const timeline = ["Luma Studio", "QuotePilot", "ReserveFlow", "ClientHub", "CommerceKit", "EventPass", "SupportDesk Lite", "API Meter"];
 
+const availabilityPreview = [
+  ["09:00", "Open"],
+  ["10:30", "Booked"],
+  ["13:00", "Open"],
+  ["15:30", "Open"],
+];
+
 export default async function DashboardPage() {
   const [stats, acceptedQuotes] = await Promise.all([
     getDashboardStats(),
@@ -52,21 +59,32 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <main className="px-6 py-10 text-foreground">
+    <main className="bg-[linear-gradient(180deg,#f5fbff_0%,#eef7fb_100%)] px-6 py-10 text-foreground">
       <div className="mx-auto grid max-w-6xl gap-8">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="grid gap-6 lg:grid-cols-[1fr_0.85fr] lg:items-end">
           <div>
+            <p className="inline-flex rounded-full border bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+              KV Portfolio Ecosystem - Demo Mode
+            </p>
             <p className="text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
               ReserveFlow operations
             </p>
-            <p className="mt-2 inline-flex border bg-secondary px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
-              KV Portfolio Ecosystem - Demo Mode
-            </p>
             <h1 className="mt-3 text-3xl font-semibold">Booking control room</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
+              ReserveFlow reprend une soumission acceptee, garde le consultant choisi,
+              montre les disponibilites et cree le rendez-vous qui alimentera ClientHub.
+            </p>
           </div>
-          <Link href="/dashboard/bookings" className="inline-flex items-center gap-2 text-sm font-medium">
-            Manage bookings <ArrowRight className="size-4" />
-          </Link>
+          <section className="rounded-lg border bg-card p-5 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+              Ce que tu peux tester ici
+            </p>
+            <div className="mt-3 grid gap-2 text-sm">
+              <p><span className="font-semibold">Recoit:</span> client, email, budget, besoin et consultant depuis QuotePilot.</p>
+              <p><span className="font-semibold">Transmet:</span> booking.created vers ClientHub.</p>
+              <p><span className="font-semibold">Boilerplate:</span> calendrier, disponibilites et formulaire pre-rempli.</p>
+            </div>
+          </section>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -97,6 +115,37 @@ export default async function DashboardPage() {
             <Badge>Cancelled {stats.cancelled}</Badge>
           </CardContent>
         </Card>
+
+        <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+          <Card>
+            <CardHeader>
+              <CardTitle>Availability preview</CardTitle>
+              <CardDescription>Vue inspiree calendrier: la disponibilite est lisible avant confirmation.</CardDescription>
+            </CardHeader>
+            <CardContent className="grid grid-cols-2 gap-3">
+              {availabilityPreview.map(([time, state]) => (
+                <div key={time} className={state === "Open" ? "rounded-md border bg-background p-3" : "rounded-md border bg-secondary p-3 opacity-65"}>
+                  <p className="font-mono text-sm font-semibold">{time}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{state}</p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Resume avant confirmation</CardTitle>
+              <CardDescription>Le recruteur sait quelles donnees seront envoyees au prochain module.</CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-3 text-sm">
+              <p><span className="font-semibold">Client:</span> depuis le formulaire Luma et la soumission QuotePilot.</p>
+              <p><span className="font-semibold">Consultant:</span> Maya Laurent ou Noah Bennett selon le choix reel.</p>
+              <p><span className="font-semibold">Prochain module:</span> ClientHub recoit notes, date, consultant et flowId.</p>
+              <Link href="/dashboard/bookings" className="inline-flex items-center gap-2 font-medium text-primary">
+                Manage bookings <ArrowRight className="size-4" />
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
 
         <Card>
           <CardHeader>
@@ -137,6 +186,20 @@ export default async function DashboardPage() {
                     <p className="mt-1 text-sm text-muted-foreground">
                       Soumission {String(payload.quoteNumber ?? event.entityId ?? "-")} · Montant {String(payload.totalCents ?? "-")}
                     </p>
+                    <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
+                      <div>
+                        <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Consultant</dt>
+                        <dd className="mt-1">{String(payload.consultantName ?? "A choisir")}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Client</dt>
+                        <dd className="mt-1">{event.customerEmail ?? "-"}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Prochaine etape</dt>
+                        <dd className="mt-1">ClientHub</dd>
+                      </div>
+                    </dl>
                     <p className="mt-2 text-sm text-muted-foreground">{event.description}</p>
                   </div>
                   <Link href={href} className="inline-flex items-center gap-2 self-center text-sm font-medium">
@@ -146,8 +209,9 @@ export default async function DashboardPage() {
               );
             })}
             {acceptedQuotes.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Aucune soumission acceptee pour l&apos;instant. Accepte une soumission dans QuotePilot pour alimenter cette file.
+              <p className="rounded-md border bg-background p-4 text-sm text-muted-foreground">
+                Aucune soumission acceptee pour l&apos;instant. Accepte une soumission dans QuotePilot;
+                le client, le budget, le consultant et le flowId apparaitront dans cette file.
               </p>
             ) : null}
           </CardContent>
