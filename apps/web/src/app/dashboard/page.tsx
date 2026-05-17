@@ -124,7 +124,7 @@ export default async function DashboardPage() {
               const payload = typeof event.payload === "object" && event.payload !== null
                 ? event.payload as Record<string, unknown>
                 : {};
-              const href = `/booking?flowId=${encodeURIComponent(event.flowId)}&quoteId=${encodeURIComponent(String(event.entityId ?? ""))}&customerName=${encodeURIComponent(event.customerName ?? "")}&customerEmail=${encodeURIComponent(event.customerEmail ?? "")}&amount=${encodeURIComponent(String(payload.totalCents ?? ""))}&consultant=${encodeURIComponent(String(payload.consultantName ?? "Maya Laurent"))}&need=${encodeURIComponent(event.description ?? "")}&quoteNumber=${encodeURIComponent(String(payload.quoteNumber ?? ""))}&sourceEventId=${encodeURIComponent(event.id)}`;
+              const href = `/booking?flowId=${encodeURIComponent(event.flowId)}&quoteId=${encodeURIComponent(String(event.entityId ?? ""))}&customerName=${encodeURIComponent(event.customerName ?? "")}&customerEmail=${encodeURIComponent(event.customerEmail ?? "")}&amount=${encodeURIComponent(String(payload.totalCents ?? ""))}&consultant=${encodeURIComponent(String(payload.consultantName ?? ""))}&need=${encodeURIComponent(event.description ?? "")}&quoteNumber=${encodeURIComponent(String(payload.quoteNumber ?? ""))}&sourceEventId=${encodeURIComponent(event.id)}`;
 
               return (
                 <article key={event.id} className="grid gap-4 rounded-md border bg-background p-4 md:grid-cols-[1fr_auto]">
