@@ -5,6 +5,7 @@ import { MarketingPageShell } from "@/components/marketing/page-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { prisma } from "@/lib/db";
+import { getCurrentLocale } from "@/lib/locale";
 
 const fallbackServices = [
   {
@@ -36,6 +37,25 @@ const fallbackServices = [
   },
 ];
 
+const copy = {
+  fr: {
+    eyebrow: "Services",
+    title: "Choisissez le type de rendez-vous avant que ReserveFlow verifie le calendrier.",
+    intro:
+      "Les services portent les donnees pratiques d'un produit de reservation: categorie, duree, prix, statut actif et description visible par les clients.",
+    free: "Gratuit",
+    cta: "Reserver ce service",
+  },
+  en: {
+    eyebrow: "Services",
+    title: "Choose the appointment type before ReserveFlow checks the calendar.",
+    intro:
+      "Services carry the practical data a booking product needs: category, duration, pricing, active state, and a description that can be shown to clients.",
+    free: "Free",
+    cta: "Book this service",
+  },
+};
+
 async function getServices() {
   try {
     const services = await prisma.service.findMany({
@@ -49,11 +69,13 @@ async function getServices() {
   }
 }
 
-function formatPrice(priceCents: number | null) {
-  return priceCents ? `$${(priceCents / 100).toFixed(0)}` : "Free";
+function formatPrice(priceCents: number | null, freeLabel: string) {
+  return priceCents ? `$${(priceCents / 100).toFixed(0)}` : freeLabel;
 }
 
 export default async function ServicesPage() {
+  const locale = await getCurrentLocale();
+  const t = copy[locale];
   const services = await getServices();
 
   return (
@@ -61,14 +83,13 @@ export default async function ServicesPage() {
       <main className="mx-auto w-full max-w-6xl px-6 py-16 sm:py-24">
         <div className="max-w-3xl">
           <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
-            Services
+            {t.eyebrow}
           </p>
           <h1 className="mt-4 text-4xl font-semibold tracking-normal text-balance sm:text-5xl">
-            Choose the appointment type before ReserveFlow checks the calendar.
+            {t.title}
           </h1>
           <p className="mt-5 text-lg leading-8 text-muted-foreground">
-            Services carry the practical data a booking product needs: category,
-            duration, pricing, active state, and a description that can be shown to clients.
+            {t.intro}
           </p>
         </div>
 
@@ -88,11 +109,11 @@ export default async function ServicesPage() {
                     <Clock3 className="size-4" />
                     {service.durationMin} min
                   </span>
-                  <span className="font-semibold">{formatPrice(service.priceCents)}</span>
+                  <span className="font-semibold">{formatPrice(service.priceCents, t.free)}</span>
                 </div>
                 <Button asChild variant="secondary">
                   <Link href={`/booking?serviceId=${service.id}`}>
-                    Book this service <ArrowRight className="size-4" />
+                    {t.cta} <ArrowRight className="size-4" />
                   </Link>
                 </Button>
               </CardContent>
