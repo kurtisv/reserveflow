@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, CalendarDays, CheckCircle2, Clock3, XCircle } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { EcosystemNotificationPanel } from "@/components/ecosystem/notification-panel";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { prisma } from "@/lib/db";
 
@@ -87,6 +88,8 @@ export default async function DashboardPage() {
             <Badge>Cancelled {stats.cancelled}</Badge>
           </CardContent>
         </Card>
+
+        <EcosystemNotificationPanel appKey="reserveflow" />
       </div>
     </main>
   );

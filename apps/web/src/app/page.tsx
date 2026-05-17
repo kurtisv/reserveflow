@@ -42,9 +42,9 @@ const copy = {
       { label: "A revoir", value: "3", tone: "bg-[#ffd8c2]" },
     ],
     liveRows: [
-      { client: "Mila Studio", service: "Audit disponibilites", time: "09:00", status: "Confirme" },
-      { client: "North Clinic", service: "Sprint planning", time: "10:30", status: "Nouveau" },
-      { client: "Atelier Rue", service: "Revue operations", time: "13:00", status: "En attente" },
+      { client: "Mara Chen", service: "Appel decouverte Northline", time: "09:00", status: "Confirme" },
+      { client: "Elliot Moore", service: "Atelier operations boutique", time: "10:30", status: "Nouveau" },
+      { client: "Nadia Fortin", service: "Revue condo Riverside", time: "13:00", status: "En attente" },
     ],
     highlights: [
       {
@@ -92,10 +92,10 @@ const copy = {
     journeyEyebrow: "Parcours produit",
     journeyTitle: "Du visiteur au dashboard, le flux reste lisible.",
     journey: [
-      { step: "01", title: "Choisir", text: "Le client compare les services et durees avant de lancer la demande." },
+      { step: "01", title: "Recevoir", text: "La demande arrive de Luma Studio ou d'une soumission QuotePilot qualifiee." },
       { step: "02", title: "Reserver", text: "Les creneaux sont generes depuis les regles, exceptions et reservations." },
-      { step: "03", title: "Confirmer", text: "Un token public donne une page de suivi claire et partageable." },
-      { step: "04", title: "Operer", text: "L'equipe traite les demandes depuis le dashboard et garde l'historique." },
+      { step: "03", title: "Confirmer", text: "Le rendez-vous devient un signal visible dans ClientHub." },
+      { step: "04", title: "Operer", text: "L'equipe garde l'origine, le client et la prochaine action visibles." },
     ],
     proofEyebrow: "Preuve recruteur",
     proofTitle: "Le projet montre la puissance du starter sans masquer le code.",
@@ -132,9 +132,9 @@ const copy = {
       { label: "Review", value: "3", tone: "bg-[#ffd8c2]" },
     ],
     liveRows: [
-      { client: "Mila Studio", service: "Availability audit", time: "09:00", status: "Confirmed" },
-      { client: "North Clinic", service: "Planning sprint", time: "10:30", status: "New" },
-      { client: "Atelier Rue", service: "Operations review", time: "13:00", status: "Pending" },
+      { client: "Mara Chen", service: "Northline discovery call", time: "09:00", status: "Confirmed" },
+      { client: "Elliot Moore", service: "Boutique operations workshop", time: "10:30", status: "New" },
+      { client: "Nadia Fortin", service: "Riverside condo review", time: "13:00", status: "Pending" },
     ],
     highlights: [
       {
@@ -182,10 +182,10 @@ const copy = {
     journeyEyebrow: "Product journey",
     journeyTitle: "From visitor to dashboard, the flow stays readable.",
     journey: [
-      { step: "01", title: "Choose", text: "The client compares services and durations before starting a request." },
+      { step: "01", title: "Receive", text: "The request arrives from Luma Studio or a qualified QuotePilot proposal." },
       { step: "02", title: "Book", text: "Slots are generated from rules, exceptions, and existing bookings." },
-      { step: "03", title: "Confirm", text: "A public token creates a clear, shareable status page." },
-      { step: "04", title: "Operate", text: "The team handles requests from the dashboard and keeps history visible." },
+      { step: "03", title: "Confirm", text: "The appointment becomes a visible signal in ClientHub." },
+      { step: "04", title: "Operate", text: "The team keeps origin, client, and next action visible." },
     ],
     proofEyebrow: "Recruiter proof",
     proofTitle: "The project shows starter power without hiding the code.",

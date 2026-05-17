@@ -13,20 +13,28 @@ import { generateBookingSlots } from "@/modules/booking";
 
 const demoServices = [
   {
-    id: "replace-with-service-id",
-    name: "Discovery call",
+    id: "northline-discovery-call",
+    name: "Northline discovery call",
     durationMin: 30,
     priceCents: null,
-    description: "Qualifier le besoin, le budget et la prochaine etape.",
-    category: "Consulting",
+    description: "Qualified QuotePilot lead review before opening the ClientHub workspace.",
+    category: "QuotePilot handoff",
   },
   {
-    id: "implementation-sprint",
-    name: "Implementation sprint",
+    id: "atelier-ops-workshop",
+    name: "Atelier operations workshop",
     durationMin: 60,
     priceCents: 25000,
-    description: "Planifier une livraison courte avec livrables et criteres de test.",
-    category: "Planning",
+    description: "Plan the workshop path that continues into EventPass and CommerceKit.",
+    category: "EventPass handoff",
+  },
+  {
+    id: "riverside-support-review",
+    name: "Riverside support review",
+    durationMin: 45,
+    priceCents: 9500,
+    description: "Review a smaller Luma consultation before SupportDesk follow-up.",
+    category: "SupportDesk handoff",
   },
 ];
 
@@ -41,7 +49,7 @@ const copy = {
       "Cette page pose le flux public: choisir un service, choisir un creneau disponible, puis confirmer les informations client.",
     benefits: [
       "Disponibilites calculees par regles, exceptions et reservations.",
-      "Pret pour connexion Prisma, paiement Stripe et rappels Resend.",
+      "Les demandes QuotePilot deviennent des rendez-vous visibles dans ClientHub.",
     ],
     choiceTitle: "Choix",
     fallbackData: "Donnees demo si la DB est vide ou indisponible.",
@@ -67,7 +75,7 @@ const copy = {
       "This page sets the public flow: choose a service, choose an available slot, then confirm the customer details.",
     benefits: [
       "Availability calculated from rules, exceptions, and bookings.",
-      "Ready for Prisma connection, Stripe payment, and Resend reminders.",
+      "QuotePilot requests become appointments visible in ClientHub.",
     ],
     choiceTitle: "Selection",
     fallbackData: "Demo data is shown if the database is empty or unavailable.",

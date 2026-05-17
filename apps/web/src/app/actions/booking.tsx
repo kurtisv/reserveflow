@@ -9,6 +9,7 @@ import { BookingStatus } from "@/generated/prisma";
 import { requireDashboardAccess } from "@/lib/dashboard-auth";
 import { sendTransactionalEmail } from "@/lib/email/resend";
 import { prisma } from "@/lib/db";
+import { publishEcosystemEvent } from "@/lib/ecosystem";
 import {
   calculateBookingEndAt,
   hasBookingConflict,
@@ -331,6 +332,7 @@ export async function createBookingRequest(formData: FormData) {
     return {
       ok: true as const,
       booking: {
+        id: booking.id,
         customerEmail: booking.customerEmail,
         customerName: booking.customerName,
         publicToken: booking.publicToken,
@@ -354,6 +356,26 @@ export async function createBookingRequest(formData: FormData) {
         startAt={result.booking.startAt}
       />
     ),
+  });
+
+  await publishEcosystemEvent({
+    sourceApp: "reserveflow",
+    targetApps: ["clienthub", "api-meter"],
+    eventType: "booking.created",
+    entityType: "booking",
+    entityId: result.booking.id,
+    customerName: result.booking.customerName,
+    customerEmail: result.booking.customerEmail,
+    title: "Rendez-vous cree dans ReserveFlow",
+    description: `${result.booking.customerName} a reserve ${result.booking.serviceName}.`,
+    payload: {
+      publicToken: result.booking.publicToken,
+      serviceName: result.booking.serviceName,
+      startAt: result.booking.startAt.toISOString(),
+    },
+    priority: "NORMAL",
+    actionLabel: "Ouvrir ClientHub",
+    actionUrl: "/dashboard",
   });
 
   revalidatePath("/dashboard/bookings");
