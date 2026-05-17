@@ -397,6 +397,34 @@ export async function createBookingRequest(formData: FormData) {
     actionUrl: "/dashboard",
   });
 
+  await sendEcosystemHandoff(
+    process.env.CLIENTHUB_INGEST_URL ?? "https://clienthub-five.vercel.app/api/ecosystem/ingest",
+    {
+      flowId: result.booking.flowId,
+      sourceApp: "reserveflow",
+      eventType: "booking.created",
+      entityType: "booking",
+      entityId: result.booking.id,
+      customerName: result.booking.customerName,
+      customerEmail: result.booking.customerEmail,
+      title: "Rendez-vous cree dans ReserveFlow",
+      description: `${result.booking.customerName} a reserve ${result.booking.serviceName}.`,
+      payload: {
+        publicToken: result.booking.publicToken,
+        serviceName: result.booking.serviceName,
+        startAt: result.booking.startAt.toISOString(),
+        quoteId: result.booking.quoteId,
+        quoteNumber: bookingRequest.quoteNumber,
+        quoteTotalCents: bookingRequest.quoteTotalCents,
+        consultantName: bookingRequest.consultantName,
+        sourceEventId: result.booking.sourceEventId,
+      },
+      priority: "NORMAL",
+      actionLabel: "Creer le projet ClientHub",
+      actionUrl: "/dashboard",
+    },
+  );
+
   if (result.booking.flowId && result.booking.quoteId) {
     await linkEcosystemEntities({
       flowId: result.booking.flowId,
@@ -411,4 +439,19 @@ export async function createBookingRequest(formData: FormData) {
 
   revalidatePath("/dashboard/bookings");
   redirect(`/booking/${result.booking.publicToken}`);
+}
+
+async function sendEcosystemHandoff(url: string, body: Record<string, unknown>) {
+  if (!body.flowId) return;
+
+  try {
+    await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      cache: "no-store",
+    });
+  } catch (error) {
+    console.error("Ecosystem handoff failed", error);
+  }
 }
