@@ -146,8 +146,8 @@ async function main() {
       {
         serviceId: createdServices[1].id,
         staffId: createdStaff[1].id,
-        customerName: "Camille Roy",
-        customerEmail: "camille@reserveflow.demo",
+        customerName: "Camille Moreau",
+        customerEmail: "camille.demo@kvportfolio.dev",
         customerPhone: "+1 418 555 0190",
         notes: "Needs a planning block for a boutique service launch.",
         startAt: bookingStarts[1],

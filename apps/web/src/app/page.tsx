@@ -42,7 +42,7 @@ const copy = {
       { label: "A revoir", value: "3", tone: "bg-[#ffd8c2]" },
     ],
     liveRows: [
-      { client: "Lead Luma entrant", service: "Appel decouverte Northline", time: "09:00", status: "Confirme" },
+      { client: "Camille Moreau", service: "Appel decouverte Studio Moreau", time: "09:00", status: "Confirme" },
       { client: "Elliot Moore", service: "Atelier operations boutique", time: "10:30", status: "Nouveau" },
       { client: "Nadia Fortin", service: "Revue condo Riverside", time: "13:00", status: "En attente" },
     ],
@@ -132,7 +132,7 @@ const copy = {
       { label: "Review", value: "3", tone: "bg-[#ffd8c2]" },
     ],
     liveRows: [
-      { client: "Lead Luma entrant", service: "Northline discovery call", time: "09:00", status: "Confirmed" },
+      { client: "Camille Moreau", service: "Studio Moreau discovery call", time: "09:00", status: "Confirmed" },
       { client: "Elliot Moore", service: "Boutique operations workshop", time: "10:30", status: "New" },
       { client: "Nadia Fortin", service: "Riverside condo review", time: "13:00", status: "Pending" },
     ],

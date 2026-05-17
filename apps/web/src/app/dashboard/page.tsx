@@ -43,6 +43,8 @@ const cards = [
   { key: "cancelled", label: "Cancelled", icon: XCircle },
 ] as const;
 
+const timeline = ["Luma Studio", "QuotePilot", "ReserveFlow", "ClientHub", "CommerceKit", "EventPass", "SupportDesk Lite", "API Meter"];
+
 export default async function DashboardPage() {
   const [stats, acceptedQuotes] = await Promise.all([
     getDashboardStats(),
@@ -56,6 +58,9 @@ export default async function DashboardPage() {
           <div>
             <p className="text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
               ReserveFlow operations
+            </p>
+            <p className="mt-2 inline-flex border bg-secondary px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+              KV Portfolio Ecosystem - Demo Mode
             </p>
             <h1 className="mt-3 text-3xl font-semibold">Booking control room</h1>
           </div>
@@ -95,6 +100,20 @@ export default async function DashboardPage() {
 
         <Card>
           <CardHeader>
+            <CardTitle>Timeline du parcours</CardTitle>
+            <CardDescription>ReserveFlow est l&apos;etape 03 du scenario demo.</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-2 text-xs font-semibold">
+            {timeline.map((item, index) => (
+              <span key={item} className={index === 2 ? "rounded-md bg-primary px-3 py-2 text-primary-foreground" : "rounded-md border bg-background px-3 py-2"}>
+                {String(index + 1).padStart(2, "0")} {item}
+              </span>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
             <CardTitle>Demandes pretes a planifier</CardTitle>
             <CardDescription>
               Soumissions acceptees dans QuotePilot avec le contexte client et le meme flowId.
@@ -128,7 +147,7 @@ export default async function DashboardPage() {
             })}
             {acceptedQuotes.length === 0 ? (
               <p className="text-sm text-muted-foreground">
-                Aucune soumission acceptee pour l'instant. Accepte une soumission dans QuotePilot pour alimenter cette file.
+                Aucune soumission acceptee pour l&apos;instant. Accepte une soumission dans QuotePilot pour alimenter cette file.
               </p>
             ) : null}
           </CardContent>
