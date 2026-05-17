@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7fbfa;
-  --foreground: #14313a;
-  --card: #fffdf8;
-  --muted: #e8f4f2;
-  --muted-foreground: #5b6f73;
-  --border: #cfe3df;
-  --primary: #0f766e;
+  --background: #f5faf8;
+  --foreground: #102f36;
+  --card: #fffefa;
+  --muted: #e7f2ef;
+  --muted-foreground: #587076;
+  --border: #c7ddd8;
+  --primary: #0d776c;
   --primary-foreground: #f8fffc;
-  --secondary: #d8eff7;
+  --secondary: #d7eef0;
   --secondary-foreground: #12313d;
-  --accent: #f2b84b;
-  --accent-soft: #fff0c9;
+  --accent: #f2bd55;
+  --accent-soft: #fff1c9;
 }
 
 @theme inline {
@@ -34,7 +34,7 @@
 
 body {
   background:
-    linear-gradient(180deg, rgba(216, 239, 247, 0.68), rgba(247, 251, 250, 0.92) 34rem),
+    linear-gradient(180deg, rgba(215, 238, 240, 0.78), rgba(245, 250, 248, 0.96) 40rem),
     var(--background);
   color: var(--foreground);
 }
@@ -42,4 +42,52 @@ body {
 ::selection {
   background: var(--accent-soft);
   color: var(--foreground);
+}
+
+.reserveflow-grid {
+  background:
+    linear-gradient(rgba(16, 47, 54, 0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 47, 54, 0.075) 1px, transparent 1px),
+    radial-gradient(circle at 18% 20%, rgba(242, 189, 85, 0.22), transparent 28rem),
+    linear-gradient(135deg, rgba(255, 254, 250, 0.92), rgba(215, 238, 240, 0.5));
+  background-size: 44px 44px, 44px 44px, auto, auto;
+}
+
+.reserveflow-panel {
+  animation: reserveflow-panel-in 700ms ease-out both;
+}
+
+.reserveflow-slot {
+  animation: reserveflow-slot-in 600ms ease-out both;
+}
+
+@keyframes reserveflow-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes reserveflow-slot-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reserveflow-panel,
+  .reserveflow-slot {
+    animation: none;
+  }
 }
