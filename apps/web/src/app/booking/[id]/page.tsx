@@ -20,6 +20,8 @@ const copy = {
     email: "Email",
     requestAnother: "Faire une autre demande",
     caseStudy: "Voir l'etude de cas",
+    sent: "Rendez-vous confirme. Le projet a ete envoye vers ClientHub.",
+    openClientHub: "Ouvrir ClientHub",
   },
   en: {
     received: "Booking received",
@@ -32,6 +34,8 @@ const copy = {
     email: "Email",
     requestAnother: "Request another booking",
     caseStudy: "View project case study",
+    sent: "Booking confirmed. The project was sent to ClientHub.",
+    openClientHub: "Open ClientHub",
   },
 };
 
@@ -122,7 +126,19 @@ export default async function BookingConfirmationPage({
           </CardContent>
         </Card>
 
+        {booking.flowId ? (
+          <section className="rounded-lg border border-primary/30 bg-primary-soft p-5">
+            <p className="font-semibold">{t.sent}</p>
+            <p className="mt-2 font-mono text-xs text-muted-foreground">flowId: {booking.flowId}</p>
+          </section>
+        ) : null}
+
         <div className="flex flex-wrap gap-3">
+          {booking.flowId ? (
+            <Button asChild>
+              <Link href="https://clienthub-five.vercel.app/dashboard">{t.openClientHub}</Link>
+            </Button>
+          ) : null}
           <Button asChild>
             <Link href="/booking">{t.requestAnother}</Link>
           </Button>

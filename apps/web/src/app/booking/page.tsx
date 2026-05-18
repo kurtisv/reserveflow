@@ -107,6 +107,9 @@ type BookingSearchParams = {
   amount?: string;
   consultant?: string;
   need?: string;
+  projectType?: string;
+  budgetRange?: string;
+  originalMessage?: string;
   quoteNumber?: string;
   sourceEventId?: string;
 };
@@ -335,6 +338,9 @@ export default async function BookingPage({
                   {params.consultant ? <input name="consultantName" type="hidden" value={params.consultant} /> : null}
                   {params.quoteNumber ? <input name="quoteNumber" type="hidden" value={params.quoteNumber} /> : null}
                   {params.amount ? <input name="quoteTotalCents" type="hidden" value={params.amount} /> : null}
+                  {params.projectType ? <input name="projectType" type="hidden" value={params.projectType} /> : null}
+                  {params.budgetRange ? <input name="budgetRange" type="hidden" value={params.budgetRange} /> : null}
+                  <input name="originalMessage" type="hidden" value={params.originalMessage ?? params.need ?? ""} />
                   <div className="grid gap-2">
                     <Label>{t.slot}</Label>
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">

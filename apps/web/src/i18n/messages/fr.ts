@@ -10,7 +10,7 @@ const fr = {
     api: "Etude de cas",
     docs: "Docs",
     contact: "Contact",
-    dashboard: "Dashboard",
+    dashboard: "Tableau de bord",
   },
   booking: {
     title: "Reservation claire pour services, equipe et disponibilites.",

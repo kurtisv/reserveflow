@@ -6,6 +6,7 @@ import { EcosystemNotificationPanel } from "@/components/ecosystem/notification-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { prisma } from "@/lib/db";
 import { getIncomingEcosystemEvents } from "@/lib/ecosystem";
+import { getCurrentLocale } from "@/lib/locale";
 
 async function getDashboardStats() {
   try {
@@ -36,13 +37,6 @@ async function getDashboardStats() {
   }
 }
 
-const cards = [
-  { key: "today", label: "Today", icon: CalendarDays },
-  { key: "requested", label: "Requested", icon: Clock3 },
-  { key: "confirmed", label: "Confirmed", icon: CheckCircle2 },
-  { key: "cancelled", label: "Cancelled", icon: XCircle },
-] as const;
-
 const timeline = ["Luma Studio", "QuotePilot", "ReserveFlow", "ClientHub", "CommerceKit", "EventPass", "SupportDesk Lite", "API Meter"];
 
 const availabilityPreview = [
@@ -52,7 +46,106 @@ const availabilityPreview = [
   ["15:30", "Open"],
 ];
 
+const copy = {
+  fr: {
+    productLabel: "Operations ReserveFlow",
+    title: "Salle de controle des rendez-vous",
+    intro:
+      "ReserveFlow reprend une soumission acceptee, garde le consultant choisi, montre les disponibilites et cree le rendez-vous qui alimentera ClientHub.",
+    testTitle: "Ce que tu peux tester ici",
+    receives: "Recoit",
+    receivesText: "client, email, budget, besoin et consultant depuis QuotePilot.",
+    sends: "Transmet",
+    sendsText: "booking.created vers ClientHub.",
+    boilerplate: "Boilerplate",
+    boilerplateText: "calendrier, disponibilites et formulaire pre-rempli.",
+    cards: [
+      { key: "today", label: "Aujourd'hui", icon: CalendarDays },
+      { key: "requested", label: "Demandes", icon: Clock3 },
+      { key: "confirmed", label: "Confirmes", icon: CheckCircle2 },
+      { key: "cancelled", label: "Annules", icon: XCircle },
+    ],
+    liveCount: "Compteur rendez-vous live.",
+    pipelineTitle: "Pipeline total des rendez-vous",
+    pipelineDescription: "Distribution rapide des statuts pour le jeu de donnees demo.",
+    total: "Total",
+    requested: "Demandes",
+    confirmed: "Confirmes",
+    completed: "Completes",
+    cancelled: "Annules",
+    availability: "Apercu des disponibilites",
+    availabilityDescription: "Vue inspiree calendrier: la disponibilite est lisible avant confirmation.",
+    open: "Libre",
+    booked: "Reserve",
+    summaryTitle: "Resume avant confirmation",
+    summaryDescription: "Le recruteur sait quelles donnees seront envoyees au prochain module.",
+    client: "Client",
+    consultant: "Consultant",
+    nextModule: "Prochain module",
+    manage: "Gerer les rendez-vous",
+    timeline: "Timeline du parcours",
+    timelineDescription: "ReserveFlow est l'etape 03 du scenario demo.",
+    readyTitle: "Demandes pretes a planifier",
+    readyDescription: "Soumissions acceptees dans QuotePilot avec le contexte client et le meme flowId.",
+    quote: "Soumission",
+    amount: "Montant",
+    toChoose: "A choisir",
+    schedule: "Planifier le rendez-vous",
+    empty:
+      "Aucune soumission acceptee pour l'instant. Accepte une soumission dans QuotePilot; le client, le budget, le consultant et le flowId apparaitront dans cette file.",
+  },
+  en: {
+    productLabel: "ReserveFlow operations",
+    title: "Booking control room",
+    intro:
+      "ReserveFlow receives an accepted proposal, keeps the selected consultant, shows availability, and creates the booking that feeds ClientHub.",
+    testTitle: "What you can test here",
+    receives: "Receives",
+    receivesText: "client, email, budget, need, and consultant from QuotePilot.",
+    sends: "Sends",
+    sendsText: "booking.created to ClientHub.",
+    boilerplate: "Boilerplate",
+    boilerplateText: "calendar, availability, and prefilled form.",
+    cards: [
+      { key: "today", label: "Today", icon: CalendarDays },
+      { key: "requested", label: "Requested", icon: Clock3 },
+      { key: "confirmed", label: "Confirmed", icon: CheckCircle2 },
+      { key: "cancelled", label: "Cancelled", icon: XCircle },
+    ],
+    liveCount: "Live booking count.",
+    pipelineTitle: "Total booking pipeline",
+    pipelineDescription: "Quick status distribution for the demo dataset.",
+    total: "Total",
+    requested: "Requested",
+    confirmed: "Confirmed",
+    completed: "Completed",
+    cancelled: "Cancelled",
+    availability: "Availability preview",
+    availabilityDescription: "Calendar-inspired view: availability is readable before confirmation.",
+    open: "Open",
+    booked: "Booked",
+    summaryTitle: "Summary before confirmation",
+    summaryDescription: "The recruiter knows which data will be sent to the next module.",
+    client: "Client",
+    consultant: "Consultant",
+    nextModule: "Next module",
+    manage: "Manage bookings",
+    timeline: "Journey timeline",
+    timelineDescription: "ReserveFlow is step 03 of the demo scenario.",
+    readyTitle: "Requests ready to schedule",
+    readyDescription: "Accepted QuotePilot proposals with client context and the same flowId.",
+    quote: "Quote",
+    amount: "Amount",
+    toChoose: "To choose",
+    schedule: "Schedule booking",
+    empty:
+      "No accepted quote yet. Accept a quote in QuotePilot; the client, budget, consultant, and flowId will appear in this queue.",
+  },
+} as const;
+
 export default async function DashboardPage() {
+  const locale = await getCurrentLocale();
+  const t = copy[locale];
   const [stats, acceptedQuotes] = await Promise.all([
     getDashboardStats(),
     getIncomingEcosystemEvents("reserveflow", "quote.accepted", 8),
@@ -67,35 +160,34 @@ export default async function DashboardPage() {
               KV Portfolio Ecosystem - Demo Mode
             </p>
             <p className="text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
-              ReserveFlow operations
+              {t.productLabel}
             </p>
-            <h1 className="mt-3 text-3xl font-semibold">Booking control room</h1>
+            <h1 className="mt-3 text-3xl font-semibold">{t.title}</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
-              ReserveFlow reprend une soumission acceptee, garde le consultant choisi,
-              montre les disponibilites et cree le rendez-vous qui alimentera ClientHub.
+              {t.intro}
             </p>
           </div>
           <section className="rounded-lg border bg-card p-5 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-              Ce que tu peux tester ici
+              {t.testTitle}
             </p>
             <div className="mt-3 grid gap-2 text-sm">
-              <p><span className="font-semibold">Recoit:</span> client, email, budget, besoin et consultant depuis QuotePilot.</p>
-              <p><span className="font-semibold">Transmet:</span> booking.created vers ClientHub.</p>
-              <p><span className="font-semibold">Boilerplate:</span> calendrier, disponibilites et formulaire pre-rempli.</p>
+              <p><span className="font-semibold">{t.receives}:</span> {t.receivesText}</p>
+              <p><span className="font-semibold">{t.sends}:</span> {t.sendsText}</p>
+              <p><span className="font-semibold">{t.boilerplate}:</span> {t.boilerplateText}</p>
             </div>
           </section>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {cards.map((card) => (
+          {t.cards.map((card) => (
             <Card key={card.key}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
                   <card.icon className="size-4" />
                   {card.label}
                 </CardTitle>
-                <CardDescription>Live booking count.</CardDescription>
+                <CardDescription>{t.liveCount}</CardDescription>
               </CardHeader>
               <CardContent className="text-3xl font-semibold">{stats[card.key]}</CardContent>
             </Card>
@@ -104,44 +196,44 @@ export default async function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Total booking pipeline</CardTitle>
-            <CardDescription>Quick status distribution for the demo dataset.</CardDescription>
+            <CardTitle>{t.pipelineTitle}</CardTitle>
+            <CardDescription>{t.pipelineDescription}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-2">
-            <Badge>Total {stats.total}</Badge>
-            <Badge>Requested {stats.requested}</Badge>
-            <Badge>Confirmed {stats.confirmed}</Badge>
-            <Badge>Completed {stats.completed}</Badge>
-            <Badge>Cancelled {stats.cancelled}</Badge>
+            <Badge>{t.total} {stats.total}</Badge>
+            <Badge>{t.requested} {stats.requested}</Badge>
+            <Badge>{t.confirmed} {stats.confirmed}</Badge>
+            <Badge>{t.completed} {stats.completed}</Badge>
+            <Badge>{t.cancelled} {stats.cancelled}</Badge>
           </CardContent>
         </Card>
 
         <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
           <Card>
             <CardHeader>
-              <CardTitle>Availability preview</CardTitle>
-              <CardDescription>Vue inspiree calendrier: la disponibilite est lisible avant confirmation.</CardDescription>
+              <CardTitle>{t.availability}</CardTitle>
+              <CardDescription>{t.availabilityDescription}</CardDescription>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-3">
               {availabilityPreview.map(([time, state]) => (
                 <div key={time} className={state === "Open" ? "rounded-md border bg-background p-3" : "rounded-md border bg-secondary p-3 opacity-65"}>
                   <p className="font-mono text-sm font-semibold">{time}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{state}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{state === "Open" ? t.open : t.booked}</p>
                 </div>
               ))}
             </CardContent>
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Resume avant confirmation</CardTitle>
-              <CardDescription>Le recruteur sait quelles donnees seront envoyees au prochain module.</CardDescription>
+              <CardTitle>{t.summaryTitle}</CardTitle>
+              <CardDescription>{t.summaryDescription}</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-3 text-sm">
-              <p><span className="font-semibold">Client:</span> depuis le formulaire Luma et la soumission QuotePilot.</p>
-              <p><span className="font-semibold">Consultant:</span> Maya Laurent ou Noah Bennett selon le choix reel.</p>
-              <p><span className="font-semibold">Prochain module:</span> ClientHub recoit notes, date, consultant et flowId.</p>
+              <p><span className="font-semibold">{t.client}:</span> {locale === "fr" ? "depuis le formulaire Luma et la soumission QuotePilot." : "from the Luma form and QuotePilot proposal."}</p>
+              <p><span className="font-semibold">{t.consultant}:</span> {locale === "fr" ? "Maya Laurent ou Noah Bennett selon le choix reel." : "Maya Laurent or Noah Bennett based on the real choice."}</p>
+              <p><span className="font-semibold">{t.nextModule}:</span> {locale === "fr" ? "ClientHub recoit notes, date, consultant et flowId." : "ClientHub receives notes, date, consultant, and flowId."}</p>
               <Link href="/dashboard/bookings" className="inline-flex items-center gap-2 font-medium text-primary">
-                Manage bookings <ArrowRight className="size-4" />
+                {t.manage} <ArrowRight className="size-4" />
               </Link>
             </CardContent>
           </Card>
@@ -149,8 +241,8 @@ export default async function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Timeline du parcours</CardTitle>
-            <CardDescription>ReserveFlow est l&apos;etape 03 du scenario demo.</CardDescription>
+            <CardTitle>{t.timeline}</CardTitle>
+            <CardDescription>{t.timelineDescription}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-2 text-xs font-semibold">
             {timeline.map((item, index) => (
@@ -163,9 +255,9 @@ export default async function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Demandes pretes a planifier</CardTitle>
+            <CardTitle>{t.readyTitle}</CardTitle>
             <CardDescription>
-              Soumissions acceptees dans QuotePilot avec le contexte client et le meme flowId.
+              {t.readyDescription}
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-3">
@@ -184,34 +276,33 @@ export default async function DashboardPage() {
                     </div>
                     <h3 className="mt-3 font-semibold">{event.customerName ?? "Client QuotePilot"}</h3>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      Soumission {String(payload.quoteNumber ?? event.entityId ?? "-")} · Montant {String(payload.totalCents ?? "-")}
+                      {t.quote} {String(payload.quoteNumber ?? event.entityId ?? "-")} · {t.amount} {String(payload.totalCents ?? "-")}
                     </p>
                     <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
                       <div>
-                        <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Consultant</dt>
-                        <dd className="mt-1">{String(payload.consultantName ?? "A choisir")}</dd>
+                        <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{t.consultant}</dt>
+                        <dd className="mt-1">{String(payload.consultantName ?? t.toChoose)}</dd>
                       </div>
                       <div>
-                        <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Client</dt>
+                        <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{t.client}</dt>
                         <dd className="mt-1">{event.customerEmail ?? "-"}</dd>
                       </div>
                       <div>
-                        <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Prochaine etape</dt>
+                        <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{t.nextModule}</dt>
                         <dd className="mt-1">ClientHub</dd>
                       </div>
                     </dl>
                     <p className="mt-2 text-sm text-muted-foreground">{event.description}</p>
                   </div>
                   <Link href={href} className="inline-flex items-center gap-2 self-center text-sm font-medium">
-                    Planifier le rendez-vous <ArrowRight className="size-4" />
+                    {t.schedule} <ArrowRight className="size-4" />
                   </Link>
                 </article>
               );
             })}
             {acceptedQuotes.length === 0 ? (
               <p className="rounded-md border bg-background p-4 text-sm text-muted-foreground">
-                Aucune soumission acceptee pour l&apos;instant. Accepte une soumission dans QuotePilot;
-                le client, le budget, le consultant et le flowId apparaitront dans cette file.
+                {t.empty}
               </p>
             ) : null}
           </CardContent>

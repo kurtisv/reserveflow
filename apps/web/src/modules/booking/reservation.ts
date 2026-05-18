@@ -20,6 +20,9 @@ export const bookingRequestSchema = z.object({
   quoteNumber: z.string().trim().optional(),
   quoteTotalCents: z.coerce.number().int().optional(),
   quoteId: z.string().trim().optional(),
+  projectType: z.string().trim().optional(),
+  budgetRange: z.string().trim().optional(),
+  originalMessage: z.string().trim().optional(),
 });
 
 export type BookingRequestInput = z.infer<typeof bookingRequestSchema>;
@@ -40,6 +43,9 @@ export function parseBookingRequestFormData(formData: FormData) {
     quoteNumber: formData.get("quoteNumber") || undefined,
     quoteTotalCents: formData.get("quoteTotalCents") || undefined,
     quoteId: formData.get("quoteId") || undefined,
+    projectType: formData.get("projectType") || undefined,
+    budgetRange: formData.get("budgetRange") || undefined,
+    originalMessage: formData.get("originalMessage") || undefined,
   });
 
   return {
@@ -54,6 +60,9 @@ export function parseBookingRequestFormData(formData: FormData) {
     quoteNumber: parsed.quoteNumber || undefined,
     quoteTotalCents: parsed.quoteTotalCents || undefined,
     quoteId: parsed.quoteId || undefined,
+    projectType: parsed.projectType || undefined,
+    budgetRange: parsed.budgetRange || undefined,
+    originalMessage: parsed.originalMessage || undefined,
   };
 }
 
